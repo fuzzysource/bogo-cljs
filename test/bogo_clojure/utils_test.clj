@@ -55,6 +55,7 @@
                     ["Đ" :bar] "Đ"
                     ["â" :nomark] "a"
                     ["x" :nomark] "x"
+                    ["Ờ" :nomark ] "Ò"
                     }]
     (dorun (map #(is (= %2 (add-mark-char (%1 0) (%1 1))) )
           (keys test-cases)

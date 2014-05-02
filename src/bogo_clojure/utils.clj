@@ -50,14 +50,15 @@ Avaiable accents: :grave :acute :hook :tilde :dot :none"
   [char accent]
 
   (if (single-vowel? char)
-    (let [ new-accent (.indexOf ACCENTS accent)
-          lower-char (string/lower-case char)
-          accent-pos (.indexOf SINGLE-VOWELS lower-char)
-          current-accent (mod accent-pos 6)
+    (let [ new-accent-index (.indexOf ACCENTS accent)
+          c (string/lower-case char)
+          vowel-index (.indexOf SINGLE-VOWELS c)
+          current-accent-index (mod vowel-index 6)
           ]
       (to-case-of char
                   (str (get SINGLE-VOWELS
-                            (+ accent-pos (- new-accent current-accent))))))
+                            (+ vowel-index (- new-accent-index
+                                              current-accent-index))))))
     char
     ))
 
@@ -67,7 +68,9 @@ Avaiable accents: :grave :acute :hook :tilde :dot :none"
   )
 
 (defn add-mark-char
-  ":hat :breve :horn :bar :nomark"
+  "Add mark to a char.
+available marks are  :hat :breve :horn :bar :nomark
+if given char is not possible to add mark, return the original char"
   [char mark]
   (let [c (remove-accent-char (string/lower-case char))
         current-accent (get-accent-char char)
@@ -95,6 +98,5 @@ Avaiable accents: :grave :acute :hook :tilde :dot :none"
                                             (contains? #{"d" "đ"} c) "d"
                                             :else char
                                             )
-                                   char
-                                   ))
+                                   char))
                      current-accent)))
