@@ -94,5 +94,7 @@ Avaiable accents: :grave :acute :hook :tilde :dot :none"
                                             (contains? #{"u" "ư"} c) "u"
                                             (contains? #{"d" "đ"} c) "d"
                                             :else char
-                                            )))
+                                            )
+                                   char
+                                   ))
                      current-accent)))

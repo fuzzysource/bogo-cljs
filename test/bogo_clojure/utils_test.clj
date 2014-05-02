@@ -39,4 +39,23 @@
           (keys test-cases)
           (vals test-cases)))))
 
-()
+(deftest test-add-mark-char
+  (let [test-cases {
+                    ["u" :horn] "ư"
+                    ["U" :horn] "Ư"
+                    ["O" :horn] "Ơ"
+                    ["đ" :horn] "đ"
+                    ["d" :bar] "đ"
+                    ["a" :hat] "â"
+                    ["â" :breve] "ă"
+                    ["Ấ" :breve] "Ắ"
+                    ["Ă" :nomark] "A"
+                    ["Ồ" :breve] "Ồ"
+                    ["Ồ" :horn] "Ờ"
+                    ["Đ" :bar] "Đ"
+                    ["â" :nomark] "a"
+                    ["x" :nomark] "x"
+                    }]
+    (dorun (map #(is (= %2 (add-mark-char (%1 0) (%1 1))) )
+          (keys test-cases)
+          (vals test-cases)))))
