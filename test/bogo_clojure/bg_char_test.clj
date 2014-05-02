@@ -1,6 +1,6 @@
-(ns bogo-clojure.utils-test
+(ns bogo-clojure.bg-char-test
   (:require [clojure.test :refer :all]
-            [bogo-clojure.utils :refer :all]))
+            [bogo-clojure.bg-char :refer :all]))
 
 (deftest test-lower-case?
   (let [test-cases {"a" true
