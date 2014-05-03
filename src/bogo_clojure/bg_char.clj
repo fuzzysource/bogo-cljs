@@ -46,10 +46,7 @@
 
 (defn add-accent-char
   "Add mark to a character.
-Avaiable accents: :grave :acute :hook :tilde :dot :none. If the given
-  accent is not able to add accent, return the original accent
-Usage: (use-accent-char char accent)"
-
+Avaiable accents: :grave :acute :hook :tilde :dot :none"
   [char accent]
 
   (if (single-vowel? char)
@@ -72,8 +69,8 @@ Usage: (use-accent-char char accent)"
 
 (defn add-mark-char
   "Add mark to a char.
-Available marks are :hat :breve :horn :bar :nomark . If it is not possible
-  to add mark to given char, then return the original char"
+available marks are  :hat :breve :horn :bar :nomark
+if given char is not possible to add mark, return the original char"
   [char mark]
   (let [c (remove-accent-char (string/lower-case char))
         current-accent (get-accent-char char)

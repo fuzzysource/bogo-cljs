@@ -33,7 +33,11 @@
                     ["ọ" :hook] "ỏ"
                     ["ủ" :dot] "ụ"
                     ["ủ" :hook] "ủ"
-                    ["d" :hook] "d"
+                    ["o" :hook] "ỏ"
+                    ["õ" :hook] "ỏ"
+                    ["a" :hook] "ả"
+                    ["Ả" :acute] "Á"
+                    ["Y" :grave] "Ỳ"
                     }]
     (dorun (map #(is (= %2 (add-accent-char (%1 0) (%1 1))) )
           (keys test-cases)
