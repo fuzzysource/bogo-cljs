@@ -38,4 +38,13 @@ Usage: (fuzzy-split-word word)"
 
 (defn split-word
   [word]
-  (fuzzy-split-word word))
+  (let [comps (fuzzy-split-word word)
+        last-comp0 (str (last (nth comps 0)))
+        first-comp1 (str (first (nth comps 1)))]
+    (if (or (and (= "q" (string/lower-case last-comp0))
+                 (= "u" (string/lower-case first-comp1)))
+            (and (= "g" (string/lower-case last-comp0))
+                 (= "i" (string/lower-case first-comp1))
+                 (> (count (nth comps 1)) 1)))
+      [(str (nth comps 0) first-comp1) (subs (nth comps 1) 1) (nth comps 2)]
+      comps)))

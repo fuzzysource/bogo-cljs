@@ -8,4 +8,7 @@
   (is (= ["nfèogh" "oo" ""] (split-word "nfèoghoo")))
   (is (= ["ng" "èo" ""] (split-word "ngèo")))
   (is (= ["qu" "a" "n"]  (split-word "quan")))
+  (is (= ["gi" "a" "n"]  (split-word "gian")))
+  (is (= ["g" "i" "n"]  (split-word "gin")))
+  
   )
