@@ -13,5 +13,26 @@
 
 (deftest test-normalize
   (is (= "meo" (normalize "mèo")))
-  (is (= "meoconrahồca" (normalize "mÈocoNrahỒcá")))
+  (is (= "meoconrahôca" (normalize "mÈocoNrahỒcá")))
   )
+
+(deftest test-valid-word?
+  (let [test-cases {
+                    "meo" true
+                    "me" true
+                    "qua" true
+                    "mèo" true
+                    "ôin" false
+                    "ôN" true
+                    "chuyên" true
+                    "chuyêm" true
+                    "chuyêch" false
+                    "quôx" false
+                    "quên" true
+                    "quuên" false
+                    }]
+    (dorun (map #(is  (let [correct? (= %2 (valid-word? %1))]
+                        (when (not correct?) (println %1 "false"))
+                        correct?))
+                (keys test-cases)
+                (vals test-cases)))))
