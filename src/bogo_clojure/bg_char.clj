@@ -5,14 +5,6 @@
                               "òóỏõọoồốổỗộôờớởỡợơùúủũụuừứửữựưỳýỷỹỵy"))
 (def SINGLE-CONSONANTS "bcdghjklmnpqrstvwxzđ")
 (def LOWER-CHARS (str SINGLE-VOWELS SINGLE-CONSONANTS))
-
-(def VOWELS ["a", "ai", "ao", "au", "ay", "e", "eo", "i", "ia", "iu",
-             "iê", "iêu", "o", "oa", "oai", "oao", "oay", "oe", "oeo",
-             "oi", "oo", "oă", "u", "ua", "ui", "uy", "uya", "uyu",
-             "uyê", "uâ", "uây", "uê", "uô", "uôi", "uơ", "y", "yê",
-             "yêu", "â", "âu", "ây", "ê", "êu", "ô", "ôi","ă", "ơ",
-             "ơi", "ư", "ưa", "ưi", "ưu", "ươ", "ươi", "ươu"])
-
 (def ACCENTS [:grave :acute :hook :tilde :dot :none])
 (def MARKS [:hat :breve :horn :bar :nomark])
 

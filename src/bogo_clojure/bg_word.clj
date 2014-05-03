@@ -8,6 +8,25 @@
 ;;; this namespace have to be a valid vietnamese word or be able to
 ;;; develop to a valid vietnamese word.
 
+(def CONSONANTS #{"b" "c" "ch" "d" "g" "gh" "gi" "h" "k"
+                    "kh" "l" "m" "n" "ng" "ngh" "nh" "p" "ph"
+                    "qu" "r" "s" "t" "th" "tr" "v" "x" "đ" ""})
+
+(def TERMINAL_CONSONANTS #{"c" "ch" "m" "n" "ng" "nh" "p" "t" ""})
+
+(def VOWELS #{ "a" "ai" "ao" "au" "ay" "e" "eo" "i" "ia" "iu"
+               "iê" "iêu" "o" "oa" "oai" "oao" "oay" "oe" "oeo"
+               "oi" "oo" "oă" "u" "ua" "ui" "uy" "uya" "uyu"
+               "uyê" "uâ" "uây" "uê" "uô" "uôi" "uơ" "y" "yê"
+               "yêu" "â" "âu" "ây" "ê" "êu" "ô" "ôi" "ă" "ơ"
+               "ơi" "ư" "ưa" "ưi" "ưu" "ươ" "ươi" "ươu" ""})
+
+(def TERMINAL_VOWELS #{ "ai" "ao" "au" "ay" "eo" "ia" "iu" "iêu"
+                        "oai" "oao" "oay" "oeo" "oi" "ua" "ui"
+                        "uya" "uyu" "uây" "uôi" "uơ" "yêu" "âu"
+                        "ây" "êu" "ôi" "ơi" "ưa" "ưi" "ưu" "ươi"
+                        "ươu" ""})
+
 (defn fuzzy-split-word
   "Split a word into 3 components: first-consonant, vowel,
 last-consonant * last-consonant: the longest substring of consonants
@@ -50,3 +69,32 @@ Usage: (fuzzy-split-word word)"
                  (> (count (nth comps 1)) 1)))
       [(str (nth comps 0) first-comp1) (subs (nth comps 1) 1) (nth comps 2)]
       comps)))
+
+(defn normalize
+  "Lower case and remove any accent"
+  [word]
+  (reduce #(str %1 (string/lower-case (remove-accent-char  (str %2))))
+          ""
+          word))
+
+(defn valid-word?
+  "Return true if the given word is a valid vietnamese words or is extendable to
+a valid vietnamese word"
+  [word]
+  (let [comps (split-word (normalize word))
+        [first-consonant vowel last-consonant] comps
+        ]
+    (if (and (contains? CONSONANTS first-consonant)
+             (contains? VOWELS vowel)
+             (contains? TERMINAL_CONSONANTS last-consonant))
+      (if (contains? TERMINAL_VOWELS vowel)
+        (= "" last-consonant)
+        (case last-consonant
+               "ch" (contains? #{"a" "ê" "uê" "i" "uy" "oa"} vowel)
+               "c" (not (= "ơ" vowel))
+               true
+               ))
+      false
+      )
+    )
+  )

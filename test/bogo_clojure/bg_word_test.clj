@@ -9,6 +9,9 @@
   (is (= ["ng" "èo" ""] (split-word "ngèo")))
   (is (= ["qu" "a" "n"]  (split-word "quan")))
   (is (= ["gi" "a" "n"]  (split-word "gian")))
-  (is (= ["g" "i" "n"]  (split-word "gin")))
-  
+  (is (= ["g" "i" "n"]  (split-word "gin"))))
+
+(deftest test-normalize
+  (is (= "meo" (normalize "mèo")))
+  (is (= "meoconrahồca" (normalize "mÈocoNrahỒcá")))
   )
