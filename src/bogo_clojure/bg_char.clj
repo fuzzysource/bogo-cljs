@@ -35,6 +35,11 @@
     true
     false))
 
+(defn single-consonant?
+  [c]
+  (not  (single-vowel? c))
+  )
+
 (defn get-accent-char
   [c]
   (let [accent-pos (.indexOf SINGLE-VOWELS (string/lower-case c))
