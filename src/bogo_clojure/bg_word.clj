@@ -8,7 +8,7 @@
 ;;; this namespace have to be a valid vietnamese word or be able to
 ;;; develop to a valid vietnamese word.
 
-(defn split-word
+(defn fuzzy-split-word
   "Split a word into 3 components: first-consonant, vowel,
 last-consonant * last-consonant: the longest substring of consonants
 at the end of given word * vowel: the longest substring of vowel next
@@ -17,7 +17,7 @@ to the last-consonant * first-consonant: the remaining characters.
 Return value is a vector with the form:
 [first-consonant vowel last-consonant]
 
-Usage: (split-word word)"
+Usage: (fuzzy-split-word word)"
   [word]
   (let [rword (reverse word)]
     (map string/reverse
@@ -35,3 +35,7 @@ Usage: (split-word word)"
                  rword))
     )
   )
+
+(defn split-word
+  [word]
+  (fuzzy-split-word word))
