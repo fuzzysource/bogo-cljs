@@ -37,6 +37,8 @@ Usage: (fuzzy-split-word word)"
   )
 
 (defn split-word
+  "Similar to fuzzy-split-word but this function is more appropriate when
+ processing qu and gi"
   [word]
   (let [comps (fuzzy-split-word word)
         last-comp0 (str (last (nth comps 0)))
