@@ -77,24 +77,29 @@ Usage: (fuzzy-split-word word)"
           ""
           word))
 
+(defn valid-word-qu-gi?
+  [comps]
+  (let [[first-consonant vowel last-consonant] comps]
+       (cond
+        (and (= first-consonant "qu") (= (subs vowel 0 1) "u")) false
+        (and (= first-consonant "gi") (= (subs vowel 0 1) "i")) false
+        :else true)))
+
 (defn valid-word?
   "Return true if the given word is a valid vietnamese words or is extendable to
 a valid vietnamese word"
   [word]
   (let [comps (split-word (normalize word))
-        [first-consonant vowel last-consonant] comps
-        ]
+        [first-consonant vowel last-consonant] comps]
     (if (and (contains? CONSONANTS first-consonant)
              (contains? VOWELS vowel)
-             (contains? TERMINAL_CONSONANTS last-consonant))
+             (contains? TERMINAL_CONSONANTS last-consonant)
+             (valid-word-qu-gi? comps))
       (if (contains? TERMINAL_VOWELS vowel)
         (= "" last-consonant)
         (case last-consonant
-               "ch" (contains? #{"a" "ê" "uê" "i" "uy" "oa"} vowel)
-               "c" (not (= "ơ" vowel))
-               true
-               ))
-      false
-      )
-    )
-  )
+          "ch" (contains? #{"a" "ê" "uê" "i" "uy" "oa"} vowel)
+          "c" (not (= "ơ" vowel))
+          true
+          ))
+      false)))
