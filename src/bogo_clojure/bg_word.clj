@@ -103,26 +103,35 @@ Usage: (fuzzy-split-word word)"
           ))
       false)))
 
+(defn remove-accent-word
+  [word]
+  (string/join (vec (map remove-accent-char word)))
+  )
+
 (defn add-accent-word
   "Add accent to a valid word. Always keep in mind that the input has
   to be a valid word otherwise it causes error."
   [word accent]
   (let [comps (vec (split-word word))
-        vowel (comps 1)
+        vowel (remove-accent-word (comps 1))
         nvowel (normalize vowel)
+        vowel-size (count vowel)
         position-ơ-ê (+ 1 (.indexOf nvowel "ơ") (.indexOf nvowel "ê"))]
-    (if (and (empty? (comps 0)) (empty? (comps 2)))
-      (cond
-       (empty? vowel) ""
-       (> position-ơ-ê -1) (string/join [(subs vowel 0 position-ơ-ê)
-                                         (add-accent-char (nth vowel position-ơ-ê)
-                                                          accent)
-                                         (subs vowel (inc position-ơ-ê))])
-       (= (count vowel) 3) (string/join [(nth vowel 0)
-                                         (add-accent-char (nth vowel 1)
-                                                          accent)
-                                         (nth vowel 2)])
-       :else (string/join [ (add-accent-char (nth vowel 0) accent)
-                            (subs vowel 1)]))
-      (string/join [(comps 0) (add-accent-word vowel accent) (comps 2)])
-      )))
+    (cond
+     (empty? vowel) word
+     (> position-ơ-ê -1)
+     (string/join [(comps 0) (subs vowel 0 position-ơ-ê)
+                   (add-accent-char (nth vowel position-ơ-ê) accent)
+                   (subs vowel (inc position-ơ-ê))
+                   (comps 2)])
+     (or (= 3 vowel-size) (and (= 2 vowel-size) (not (empty? (comps 2)))))
+     (string/join [(comps 0)
+                   (nth vowel 0)
+                   (add-accent-char (nth vowel 1) accent)
+                   (subs vowel 2)
+                   (comps 2)])
+     :else (string/join [ (comps 0)
+                          (add-accent-char (nth vowel 0) accent)
+                          (subs vowel 1)
+                          (comps 2)]))
+    ))
