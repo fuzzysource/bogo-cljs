@@ -97,3 +97,7 @@ if given char is not possible to add mark, return the original char"
                                               :else char)
                                      char))
                        current-accent))))
+
+(defn remove-mark-char
+  [c]
+  (add-mark-char c :nomark))
