@@ -46,18 +46,19 @@
 Avaiable accents: :grave :acute :hook :tilde :dot :none"
   [char accent]
 
-  (if (single-vowel? char)
-    (let [ new-accent-index (.indexOf ACCENTS accent)
-          c (string/lower-case char)
-          vowel-index (.indexOf SINGLE-VOWELS c)
-          current-accent-index (mod vowel-index 6)
-          ]
-      (to-case-of char
-                  (str (get SINGLE-VOWELS
-                            (+ vowel-index (- new-accent-index
-                                              current-accent-index))))))
-    char
-    ))
+  (if (char? char)
+    (add-accent-char (str char) accent)
+    (if (single-vowel? char)
+      (let [ new-accent-index (.indexOf ACCENTS accent)
+            c (string/lower-case char)
+            vowel-index (.indexOf SINGLE-VOWELS c)
+            current-accent-index (mod vowel-index 6)
+            ]
+        (to-case-of char
+                    (str (get SINGLE-VOWELS
+                              (+ vowel-index (- new-accent-index
+                                                current-accent-index))))))
+      char)))
 
 (defn remove-accent-char
   [c]
