@@ -99,8 +99,7 @@ Usage: (fuzzy-split-word word)"
         (case last-consonant
           "ch" (contains? #{"a" "ê" "uê" "i" "uy" "oa"} vowel)
           "c" (not (= "ơ" vowel))
-          true
-          ))
+          true))
       false)))
 
 (defn remove-accent-word
@@ -163,3 +162,18 @@ Usage: (fuzzy-split-word word)"
                                        word))
                     mark)
   )
+
+(defn get-last-word
+  "Get the longest valid word lying at the end of the given string"
+  [astring]
+  (if (valid-word? astring)
+    astring
+    (get-last-word (subs astring 1))
+    ))
+
+(defn grammar-split-word
+  [astring]
+  (let [last-word (get-last-word astring)
+        position (- (count astring) (count last-word))
+        first-word (subs astring 0 position)]
+    [first-word last-word]))

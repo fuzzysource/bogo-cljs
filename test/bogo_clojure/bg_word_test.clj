@@ -30,6 +30,7 @@
                     "quôx" false
                     "quên" true
                     "quuên" false
+                    "mươ" true
                     }]
     (dorun (map #(is  (let [correct? (= %2 (valid-word? %1))]
                         (when (not correct?) (println %1 "false"))
@@ -72,4 +73,12 @@
   (is (= "phất" (add-mark-word "phát" :hat)))
   (is (= "sắc" (add-mark-word "sác" :breve)))
   (is (= "Duọc" (add-mark-word "Được" :nomark)))
+  )
+
+(deftest test-get-last-word
+  (is (= "dang" (get-last-word "ddang")))
+  (is (= "đăng" (get-last-word "đồngđăng")))
+  (is (= "do" (get-last-word "độclậptựdo")))
+  (is (= "ong" (get-last-word "mèong")))
+  (is (= "" (get-last-word "")))
   )
