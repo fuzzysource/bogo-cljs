@@ -82,3 +82,15 @@
   (is (= "ong" (get-last-word "mèong")))
   (is (= "" (get-last-word "")))
   )
+
+(deftest test-grammar-split-word
+  (is (= ["d" "dang"] (grammar-split-word "ddang")))
+  (is (= ["đồng" "đăng"] (grammar-split-word "đồngđăng")))
+  (is (= ["" ""] (grammar-split-word "")))
+  )
+
+(deftest test-add-accent-string
+  (is (= "mèoconrahồcá" (add-accent-string "mèoconrahồca" :acute))))
+
+(deftest test-add-mark-string
+  (is (= "mèoconrahồcấ" (add-accent-string "mèoconrahồcá" :acute))))

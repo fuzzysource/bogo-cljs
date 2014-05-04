@@ -177,3 +177,13 @@ Usage: (fuzzy-split-word word)"
         position (- (count astring) (count last-word))
         first-word (subs astring 0 position)]
     [first-word last-word]))
+
+(defn add-accent-string
+  [astring accent]
+  (let [[first-word last-word] (grammar-split-word astring)]
+    (string/join [first-word (add-accent-word last-word accent)])))
+
+(defn add-mark-string
+  [astring mark]
+  (let [[first-word last-word] (grammar-split-word astring)]
+    (string/join [first-word (add-accent-word last-word mark)])))
