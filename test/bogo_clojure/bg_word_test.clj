@@ -62,3 +62,14 @@
   (is (= "hòa" (add-accent-word "hoa" :grave)))
   (is (= "giẴc" (add-accent-word "giẲc" :tilde)))
   )
+
+(deftest test-add-mark-word
+  (is (= "đang" (add-mark-word "dang" :bar)))
+  (is (= "dược" (add-mark-word "duọc" :horn)))
+  (is (= "mưu" (add-mark-word "muu" :horn)))
+  (is (= "bướU" (add-mark-word "bướU" :horn)))
+  (is (= "Đang" (add-mark-word "Dang" :bar)))
+  (is (= "phất" (add-mark-word "phát" :hat)))
+  (is (= "sắc" (add-mark-word "sác" :breve)))
+  (is (= "Duọc" (add-mark-word "Được" :nomark)))
+  )

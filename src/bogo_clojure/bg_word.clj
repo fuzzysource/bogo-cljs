@@ -105,7 +105,7 @@ Usage: (fuzzy-split-word word)"
 
 (defn remove-accent-word
   [word]
-  (string/join (vec (map remove-accent-char word)))
+  (string/join (mapv remove-accent-char word))
   )
 
 (defn add-accent-word
@@ -133,5 +133,33 @@ Usage: (fuzzy-split-word word)"
      :else (string/join [ (comps 0)
                           (add-accent-char (nth vowel 0) accent)
                           (subs vowel 1)
-                          (comps 2)]))
-    ))
+                          (comps 2)]))))
+
+(defn naive-add-mark-word
+  [word mark]
+  (string/join (mapv (fn [c] (add-mark-char c mark))
+                     word)))
+
+(defn refine-mark-word
+  "Refine mark adding in case vowel is ươu or ưu"
+  [word mark]
+  (let [comps (vec (split-word word))
+        vowel (comps 1)
+        nvowel (normalize vowel)
+        vowel-size (count vowel)]
+    (if (or (= "ưư" nvowel) (= "ươư" nvowel))
+      (string/join [(comps 0)
+                    (subs vowel 0 (dec vowel-size))
+                    (remove-mark-char (nth vowel (dec vowel-size)))
+                    (comps 2)])
+      word)))
+
+
+(defn add-mark-word
+  "Add mark to a valid word. Always keep in mind that the input has to
+  be a valid word otherwise it causes error."
+  [word mark]
+  (refine-mark-word (string/join (mapv (fn [c] (add-mark-char c mark))
+                                       word))
+                    mark)
+  )
