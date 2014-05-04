@@ -38,7 +38,7 @@
 Usage: (fuzzy-split-word word)"
   [word]
   (let [rword (reverse word)]
-    (map string/reverse
+    (mapv string/reverse
          (reduce (fn [comps char]
                    (let [c  (str char)]
                      (cond
@@ -72,7 +72,7 @@ Usage: (fuzzy-split-word word)"
 (defn normalize
   "Lower case and remove any accent"
   [word]
-  (reduce #(str %1 (string/lower-case (remove-accent-char  (str %2))))
+  (reduce #(str %1 (string/lower-case (remove-accent-char %2)))
           ""
           word))
 
@@ -80,8 +80,8 @@ Usage: (fuzzy-split-word word)"
   [comps]
   (let [[first-consonant vowel last-consonant] comps]
        (cond
-        (and (= first-consonant "qu") (= (subs vowel 0 1) "u")) false
-        (and (= first-consonant "gi") (= (subs vowel 0 1) "i")) false
+        (and (= first-consonant "qu") (= (first vowel) \u )) false
+        (and (= first-consonant "gi") (= (first vowel) \i)) false
         :else true)))
 
 (defn valid-word?
@@ -111,7 +111,7 @@ Usage: (fuzzy-split-word word)"
   "Add accent to a valid word. Always keep in mind that the input has
   to be a valid word otherwise it causes error."
   [word accent]
-  (let [comps (vec (split-word word))
+  (let [comps (split-word word)
         vowel (remove-accent-word (comps 1))
         nvowel (normalize vowel)
         vowel-size (count vowel)
@@ -186,4 +186,4 @@ Usage: (fuzzy-split-word word)"
 (defn add-mark-string
   [astring mark]
   (let [[first-word last-word] (grammar-split-word astring)]
-    (string/join [first-word (add-accent-word last-word mark)])))
+    (string/join [first-word (add-mark-word last-word mark)])))

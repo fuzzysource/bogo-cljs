@@ -93,4 +93,4 @@
   (is (= "mèoconrahồcá" (add-accent-string "mèoconrahồca" :acute))))
 
 (deftest test-add-mark-string
-  (is (= "mèoconrahồcấ" (add-accent-string "mèoconrahồcá" :acute))))
+  (is (= "mèoconrahồcấ" (add-mark-string "mèoconrahồcá" :hat))))
