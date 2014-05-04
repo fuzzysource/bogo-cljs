@@ -29,12 +29,11 @@
 
 (defn fuzzy-split-word
   "Split a word into 3 components: first-consonant, vowel,
-last-consonant * last-consonant: the longest substring of consonants
-at the end of given word * vowel: the longest substring of vowel next
-to the last-consonant * first-consonant: the remaining characters.
-
-Return value is a vector with the form:
-[first-consonant vowel last-consonant]
+  last-consonant * last-consonant: the longest substring of consonants
+  at the end of given word * vowel: the longest substring of vowel next
+  to the last-consonant * first-consonant: the remaining characters.
+  Return value is a vector with the form:
+  [first-consonant vowel last-consonant]
 
 Usage: (fuzzy-split-word word)"
   [word]
@@ -56,8 +55,8 @@ Usage: (fuzzy-split-word word)"
   )
 
 (defn split-word
-  "Similar to fuzzy-split-word but this function is more appropriate when
- processing qu and gi"
+  "Similar to fuzzy-split-word but this function is more appropriate
+  when processing qu and gi"
   [word]
   (let [comps (fuzzy-split-word word)
         last-comp0 (str (last (nth comps 0)))
@@ -86,8 +85,8 @@ Usage: (fuzzy-split-word word)"
         :else true)))
 
 (defn valid-word?
-  "Return true if the given word is a valid vietnamese words or is extendable to
-a valid vietnamese word"
+  "Return true if the given word is a valid vietnamese words or is
+  extendable to a valid vietnamese word"
   [word]
   (let [comps (split-word (normalize word))
         [first-consonant vowel last-consonant] comps]
@@ -103,3 +102,27 @@ a valid vietnamese word"
           true
           ))
       false)))
+
+(defn add-accent-word
+  "Add accent to a valid word. Always keep in mind that the input has
+  to be a valid word otherwise it causes error."
+  [word accent]
+  (let [comps (vec (split-word word))
+        vowel (comps 1)
+        nvowel (normalize vowel)
+        position-ơ-ê (+ 1 (.indexOf nvowel "ơ") (.indexOf nvowel "ê"))]
+    (if (and (empty? (comps 0)) (empty? (comps 2)))
+      (cond
+       (empty? vowel) ""
+       (> position-ơ-ê -1) (string/join [(subs vowel 0 position-ơ-ê)
+                                         (add-accent-char (nth vowel position-ơ-ê)
+                                                          accent)
+                                         (subs vowel (inc position-ơ-ê))])
+       (= (count vowel) 3) (string/join [(nth vowel 0)
+                                         (add-accent-char (nth vowel 1)
+                                                          accent)
+                                         (nth vowel 2)])
+       :else (string/join [ (add-accent-char (nth vowel 0) accent)
+                            (subs vowel 1)]))
+      (string/join [(comps 0) (add-accent-word vowel accent) (comps 2)])
+      )))

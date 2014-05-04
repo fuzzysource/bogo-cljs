@@ -36,3 +36,13 @@
                         correct?))
                 (keys test-cases)
                 (vals test-cases)))))
+
+(deftest test-add-accent-word
+  (is (= "mèo" (add-accent-word "meo" :grave)))
+  (is (= "Èo" (add-accent-word "Éo" :grave)))
+  (is (= "miếU" (add-accent-word "miêU" :acute)))
+  (is (= "ChuyỆn" (add-accent-word "ChuyÊn" :dot)))
+  (is (= "mf" (add-accent-word "mf" :grave)))
+  (is (= "Om" (add-accent-word "Ọm" :none)))
+  (is (= "ước" (add-accent-word "ươc" :acute)))
+  )
