@@ -8,6 +8,14 @@
 (def ACCENTS [:grave :acute :hook :tilde :dot :none])
 (def MARKS [:hat :breve :horn :bar :nomark])
 
+(defn accents?
+  [transform]
+  (not= -1 (.indexOf ACCENTS transform)))
+
+(defn mark?
+  [transform]
+  (not= -1 (.indexOf MARKS transform)))
+
 (defn lower-case?
   [c]
   (if (not= -1 (.indexOf LOWER-CHARS c))

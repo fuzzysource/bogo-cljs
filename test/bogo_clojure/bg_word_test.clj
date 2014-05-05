@@ -94,3 +94,10 @@
 
 (deftest test-add-mark-string
   (is (= "mèoconrahồcấ" (add-mark-string "mèoconrahồcá" :hat))))
+
+(deftest test-rollback
+  (is (= "meo" (rollback "mèo" :grave)))
+  (is (= "Dăng" (rollback "Đăng" :bar)))
+  (is (= "meo" (rollback "mèo" :acute)))
+  (is (= "Đuong" (rollback "Đương" :horn)))
+  )

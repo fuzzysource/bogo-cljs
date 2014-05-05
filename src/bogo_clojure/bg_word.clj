@@ -187,3 +187,21 @@ Usage: (fuzzy-split-word word)"
   [astring mark]
   (let [[first-word last-word] (grammar-split-word astring)]
     (string/join [first-word (add-mark-word last-word mark)])))
+
+
+
+(defn rollback
+  [word transform]
+  (let [[first-consonant vowel last-consonant] (split-word word)]
+    (cond
+      (= :bar transform)
+      (string/join [(add-mark-word first-consonant :nomark)
+                    vowel
+                    last-consonant])
+      (accents? transform)
+      (remove-accent-word word)
+      (mark? transform)
+      (string/join [first-consonant
+                    (add-mark-word vowel :nomark)
+                    last-consonant])
+      :else word)))
