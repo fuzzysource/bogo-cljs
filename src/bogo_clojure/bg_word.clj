@@ -198,7 +198,7 @@ Usage: (fuzzy-split-word word)"
       (string/join [(add-mark-word first-consonant :nomark)
                     vowel
                     last-consonant])
-      (accents? transform)
+      (accent? transform)
       (remove-accent-word word)
       (mark? transform)
       (string/join [first-consonant
