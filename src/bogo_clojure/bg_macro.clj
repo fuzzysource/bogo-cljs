@@ -60,4 +60,4 @@
 (defmacro add-accent
   [key accent]
   `(fn [word#]
-     (process-accent word# ~accent key)))
+     (process-accent word# ~accent ~key)))

@@ -25,7 +25,9 @@
               (str last-word key))))))
 
 (defn process-sequence
-  [sequence typemode]
-  (reduce (fn [word key] (process-key word key typemode))
-           ""
-           sequence))
+  ([sequence]
+     (process-sequence sequence TELEX))
+  ([sequence typemode]
+     (reduce (fn [word key] (process-key word key typemode))
+             ""
+             sequence)))
