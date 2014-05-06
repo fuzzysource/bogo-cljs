@@ -1,36 +1,25 @@
 # bogo-clojure
 
-FIXME: description
+## Thử nghiệm
 
-## Installation
+* Clone và  `lein repl`
+* Try
+```clojure
+    (process-key "meo" "f") ; => mèo
+    (process-key "mèo" "f") ; => meof
+    (process-sequence "meof") ; => mèo
+```
 
-Download from http://example.com/FIXME.
+At this moment, the key that triggers transformation must be a lower
+character.
 
-## Usage
+## Tạo kiểu gõ
 
-FIXME: explanation
+Các tạo kiểu gõ được thể hiện trong file `bg_telex.clj`.
 
-    $ java -jar bogo-clojure-0.1.0-standalone.jar [args]
+## Test
 
-## Options
+```
+    lein test
+```
 
-FIXME: listing of options this app accepts.
-
-## Examples
-
-...
-
-### Bugs
-
-...
-
-### Any Other Sections
-### That You Think
-### Might be Useful
-
-## License
-
-Copyright © 2014 FIXME
-
-Distributed under the Eclipse Public License either version 1.0 or (at
-your option) any later version.
