@@ -14,36 +14,36 @@
 
 (defn rollback
   [word transform]
-  (let [[first-consonant vowel last-consonant] (split-word word)]
+  (let [[first-consonant vowel last-consonant] (word-structure word)]
     (cond
       (= :bar transform)
-      (string/join [(add-mark-word first-consonant :nomark)
+      (string/join [(mark->word first-consonant :nomark)
                     vowel
                     last-consonant])
       (accent? transform)
       (remove-accent-word word)
       (mark? transform)
       (string/join [first-consonant
-                    (add-mark-word vowel :nomark)
+                    (mark->word vowel :nomark)
                     last-consonant])
       :else word)))
 
 (defn process-mark
   [word mark key]
-  (let [new-word (add-mark-word word mark)]
+  (let [new-word (mark->word word mark)]
     (if (not= new-word word)
       new-word
       (str (rollback new-word mark) key))))
 
 (defn process-accent
   [word accent key]
-  (let [new-word (add-accent-word word accent)]
+  (let [new-word (accent->word word accent)]
     (if (not= new-word word)
       new-word
       (str (rollback new-word accent)
            key))))
 
-(defmacro add-mark
+(defmacro mark->
   [key & pairs]
   `(fn [~'word]
      ~(concat '(cond)
@@ -57,7 +57,7 @@
                                    (process-mark ~'word ~(first mark-set) ~key))))))
               `(:else (str ~'word ~key)))))
 
-(defmacro add-accent
+(defmacro accent->
   [key accent]
   `(fn [word#]
      (process-accent word# ~accent ~key)))

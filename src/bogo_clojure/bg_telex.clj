@@ -6,24 +6,24 @@
 
 (def TELEX
   {
-   "a" (add-mark "a" :hat ["a" "ă" "â"])
-   "w" (add-mark "w"
-                 :horn ["u" "ư" "uo" "ươ"]
-                 :breve ["a" "ă" "â"]
-                 :horn ["o" "ơ" "ô"])
-   "o" (add-mark "o" :hat ["o" "ô" "ơ"])
-   "d" (add-mark "d"
-                 :bar ["d" "đ"])
-   "r" (add-accent "r"
-                   :hook)
-   "x" (add-accent "x"
-                   :tilde)
-   "j" (add-accent "j"
-                   :dot)
-   "s" (add-accent "s"
-                   :acute)
-   "f" (add-accent "f"
-                   :grave)
-   "z" (add-accent "z"
-                   :none)
+   "a" (mark-> "a" :hat ["a" "ă" "â"])
+   "w" (mark-> "w"
+               :horn ["u" "ư" "uo" "ươ"]
+               :breve ["a" "ă" "â"]
+               :horn ["o" "ơ" "ô"])
+   "o" (mark-> "o" :hat ["o" "ô" "ơ"])
+   "d" (mark-> "d"
+               :bar ["d" "đ"])
+   "r" (accent-> "r"
+                 :hook)
+   "x" (accent-> "x"
+                 :tilde)
+   "j" (accent-> "j"
+                 :dot)
+   "s" (accent-> "s"
+                 :acute)
+   "f" (accent-> "f"
+                 :grave)
+   "z" (accent-> "z"
+                 :none)
    })
