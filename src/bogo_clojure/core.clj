@@ -28,6 +28,6 @@
   ([sequence]
      (process-sequence sequence TELEX))
   ([sequence typemode]
-     (reduce (fn [word key] (process-key word key typemode))
+     (reduce (fn [word key] (process-key word (str key) typemode))
              ""
              sequence)))
