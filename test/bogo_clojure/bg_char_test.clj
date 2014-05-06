@@ -22,7 +22,7 @@
   (is (= "x" (to-case-of "a" "X")))
   )
 
-(deftest test-add-accent-char
+(deftest test-accent->char
   (let [test-cases {
                     ["ư" :acute] "ứ"
                     ["Ư" :dot] "Ự"
@@ -39,11 +39,11 @@
                     ["Ả" :acute] "Á"
                     ["Y" :grave] "Ỳ"
                     }]
-    (dorun (map #(is (= %2 (add-accent-char (%1 0) (%1 1))) )
+    (dorun (map #(is (= %2 (accent->char (%1 0) (%1 1))) )
           (keys test-cases)
           (vals test-cases)))))
 
-(deftest test-add-mark-char
+(deftest test-mark->char
   (let [test-cases {
                     ["u" :horn] "ư"
                     ["U" :horn] "Ư"
@@ -61,6 +61,6 @@
                     ["x" :nomark] "x"
                     ["Ờ" :nomark ] "Ò"
                     }]
-    (dorun (map #(is (= %2 (add-mark-char (%1 0) (%1 1))) )
+    (dorun (map #(is (= %2 (mark->char (%1 0) (%1 1))) )
           (keys test-cases)
           (vals test-cases)))))

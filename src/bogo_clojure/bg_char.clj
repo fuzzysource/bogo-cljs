@@ -48,13 +48,13 @@
       (ACCENTS current-accent)
       :none)))
 
-(defn add-accent-char
+(defn accent->char
   "Add mark to a character.
 Avaiable accents: :grave :acute :hook :tilde :dot :none"
   [char accent]
 
   (if (char? char)
-    (add-accent-char (str char) accent)
+    (accent->char (str char) accent)
     (if (single-vowel? char)
       (let [ new-accent-index (.indexOf ACCENTS accent)
             c (string/lower-case char)
@@ -69,19 +69,19 @@ Avaiable accents: :grave :acute :hook :tilde :dot :none"
 
 (defn remove-accent-char
   [c]
-  (add-accent-char c :none)
+  (accent->char c :none)
   )
 
-(defn add-mark-char
+(defn mark->char
   "Add mark to a char.
 available marks are  :hat :breve :horn :bar :nomark
 if given char is not possible to add mark, return the original char"
   [char mark]
   (if (char? char)
-    (add-mark-char (str char) mark)
+    (mark->char (str char) mark)
     (let [c (remove-accent-char (string/lower-case char))
           current-accent (get-accent-char char)]
-      (add-accent-char (to-case-of char
+      (accent->char (to-case-of char
                                    (case mark
                                      :hat (cond
                                            (contains? #{"a" "ă" "â"} c) "â"
@@ -108,4 +108,4 @@ if given char is not possible to add mark, return the original char"
 
 (defn remove-mark-char
   [c]
-  (add-mark-char c :nomark))
+  (mark->char c :nomark))
