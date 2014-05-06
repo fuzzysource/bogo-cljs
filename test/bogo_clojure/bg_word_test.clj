@@ -2,14 +2,14 @@
   (:require [clojure.test :refer :all]
             [bogo-clojure.bg-word :refer :all]))
 
-(deftest test-split-word
-  (is (= ["m" "o" "ng"] (split-word "mong")))
-  (is (= ["m" "eo" ""] (split-word "meo")))
-  (is (= ["nfèogh" "oo" ""] (split-word "nfèoghoo")))
-  (is (= ["ng" "èo" ""] (split-word "ngèo")))
-  (is (= ["qu" "a" "n"]  (split-word "quan")))
-  (is (= ["gi" "a" "n"]  (split-word "gian")))
-  (is (= ["g" "i" "n"]  (split-word "gin"))))
+(deftest test-word-structure
+  (is (= ["m" "o" "ng"] (word-structure "mong")))
+  (is (= ["m" "eo" ""] (word-structure "meo")))
+  (is (= ["nfèogh" "oo" ""] (word-structure "nfèoghoo")))
+  (is (= ["ng" "èo" ""] (word-structure "ngèo")))
+  (is (= ["qu" "a" "n"]  (word-structure "quan")))
+  (is (= ["gi" "a" "n"]  (word-structure "gian")))
+  (is (= ["g" "i" "n"]  (word-structure "gin"))))
 
 (deftest test-normalize
   (is (= "meo" (normalize "mèo")))
@@ -39,41 +39,41 @@
                 (keys test-cases)
                 (vals test-cases)))))
 
-(deftest test-add-accent-word
-  (is (= "mèo" (add-accent-word "meo" :grave)))
-  (is (= "Èo" (add-accent-word "Éo" :grave)))
-  (is (= "miếU" (add-accent-word "miêU" :acute)))
-  (is (= "ChuyỆn" (add-accent-word "ChuyÊn" :dot)))
-  (is (= "mf" (add-accent-word "mf" :grave)))
-  (is (= "Om" (add-accent-word "Ọm" :none)))
-  (is (= "ước" (add-accent-word "ươc" :acute)))
-  (is (= "tOàn" (add-accent-word "tOan" :grave)))
-  (is (= "giã" (add-accent-word "gia" :tilde)))
-  (is (= "quản" (add-accent-word "quan" :hook)))
-  (is (= "mia" (add-accent-word "mía" :none)))
-  (is (= "nằM" (add-accent-word "năM" :grave)))
-  (is (= "NGuyến" (add-accent-word "NGuyên" :acute)))
-  (is (= "noọng" (add-accent-word "noong" :dot)))
-  (is (= "mửa" (add-accent-word "mứa" :hook)))
-  (is (= "qu" (add-accent-word "qu" :acute)))
-  (is (= "gì" (add-accent-word "gi" :grave)))
-  (is (= "gÌn" (add-accent-word "gÍn" :grave)))
-  (is (= "gIàn" (add-accent-word "gIán" :grave)))
-  (is (= "quẢ" (add-accent-word "quÁ" :hook)))
-  (is (= "quâN" (add-accent-word "quấN" :none)))
-  (is (= "hòa" (add-accent-word "hoa" :grave)))
-  (is (= "giẴc" (add-accent-word "giẲc" :tilde)))
+(deftest test-accent->word
+  (is (= "mèo" (accent->word "meo" :grave)))
+  (is (= "Èo" (accent->word "Éo" :grave)))
+  (is (= "miếU" (accent->word "miêU" :acute)))
+  (is (= "ChuyỆn" (accent->word "ChuyÊn" :dot)))
+  (is (= "mf" (accent->word "mf" :grave)))
+  (is (= "Om" (accent->word "Ọm" :none)))
+  (is (= "ước" (accent->word "ươc" :acute)))
+  (is (= "tOàn" (accent->word "tOan" :grave)))
+  (is (= "giã" (accent->word "gia" :tilde)))
+  (is (= "quản" (accent->word "quan" :hook)))
+  (is (= "mia" (accent->word "mía" :none)))
+  (is (= "nằM" (accent->word "năM" :grave)))
+  (is (= "NGuyến" (accent->word "NGuyên" :acute)))
+  (is (= "noọng" (accent->word "noong" :dot)))
+  (is (= "mửa" (accent->word "mứa" :hook)))
+  (is (= "qu" (accent->word "qu" :acute)))
+  (is (= "gì" (accent->word "gi" :grave)))
+  (is (= "gÌn" (accent->word "gÍn" :grave)))
+  (is (= "gIàn" (accent->word "gIán" :grave)))
+  (is (= "quẢ" (accent->word "quÁ" :hook)))
+  (is (= "quâN" (accent->word "quấN" :none)))
+  (is (= "hòa" (accent->word "hoa" :grave)))
+  (is (= "giẴc" (accent->word "giẲc" :tilde)))
   )
 
-(deftest test-add-mark-word
-  (is (= "đang" (add-mark-word "dang" :bar)))
-  (is (= "dược" (add-mark-word "duọc" :horn)))
-  (is (= "mưu" (add-mark-word "muu" :horn)))
-  (is (= "bướU" (add-mark-word "bướU" :horn)))
-  (is (= "Đang" (add-mark-word "Dang" :bar)))
-  (is (= "phất" (add-mark-word "phát" :hat)))
-  (is (= "sắc" (add-mark-word "sác" :breve)))
-  (is (= "Duọc" (add-mark-word "Được" :nomark)))
+(deftest test-mark->word
+  (is (= "đang" (mark->word "dang" :bar)))
+  (is (= "dược" (mark->word "duọc" :horn)))
+  (is (= "mưu" (mark->word "muu" :horn)))
+  (is (= "bướU" (mark->word "bướU" :horn)))
+  (is (= "Đang" (mark->word "Dang" :bar)))
+  (is (= "phất" (mark->word "phát" :hat)))
+  (is (= "sắc" (mark->word "sác" :breve)))
+  (is (= "Duọc" (mark->word "Được" :nomark)))
   )
 
 (deftest test-get-last-word
@@ -90,15 +90,9 @@
   (is (= ["" ""] (grammar-split-word "")))
   )
 
-(deftest test-add-accent-string
-  (is (= "mèoconrahồcá" (add-accent-string "mèoconrahồca" :acute))))
+(deftest test-accent->string
+  (is (= "mèoconrahồcá" (accent->string "mèoconrahồca" :acute))))
 
-(deftest test-add-mark-string
-  (is (= "mèoconrahồcấ" (add-mark-string "mèoconrahồcá" :hat))))
+(deftest test-mark->string
+  (is (= "mèoconrahồcấ" (mark->string "mèoconrahồcá" :hat))))
 
-'(deftest test-rollback
-  (is (= "meo" (rollback "mèo" :grave)))
-  (is (= "Dăng" (rollback "Đăng" :bar)))
-  (is (= "meo" (rollback "mèo" :acute)))
-  (is (= "Đuong" (rollback "Đương" :horn)))
-  )

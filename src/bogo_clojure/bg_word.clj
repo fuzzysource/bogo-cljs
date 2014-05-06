@@ -28,15 +28,13 @@
                         "yêu" "yeu" "âu" "ây" "êu" "eu" "ôi" "ơi" "ưa"
                         "ưi" "ưu" "uu" "ươi" "ươu" "uou" ""})
 
-(defn fuzzy-split-word
+(defn word-structure*
   "Split a word into 3 components: first-consonant, vowel,
   last-consonant * last-consonant: the longest substring of consonants
   at the end of given word * vowel: the longest substring of vowel next
   to the last-consonant * first-consonant: the remaining characters.
   Return value is a vector with the form:
-  [first-consonant vowel last-consonant]
-
-Usage: (fuzzy-split-word word)"
+  [first-consonant vowel last-consonant]"
   [word]
   (let [rword (reverse word)]
     (mapv string/reverse
@@ -55,11 +53,11 @@ Usage: (fuzzy-split-word word)"
     )
   )
 
-(defn split-word
+(defn word-structure
   "Similar to fuzzy-split-word but this function is more appropriate
   when processing qu and gi"
   [word]
-  (let [comps (fuzzy-split-word word)
+  (let [comps (word-structure* word)
         last-comp0 (str (last (nth comps 0)))
         first-comp1 (str (first (nth comps 1)))]
     (if (or (and (= "q" (string/lower-case last-comp0))
@@ -89,7 +87,7 @@ Usage: (fuzzy-split-word word)"
   "Return true if the given word is a valid vietnamese words or is
   extendable to a valid vietnamese word"
   [word]
-  (let [comps (split-word (normalize word))
+  (let [comps (word-structure (normalize word))
         [first-consonant vowel last-consonant] comps]
     (if (and (contains? CONSONANTS first-consonant)
              (contains? VOWELS vowel)
@@ -108,11 +106,11 @@ Usage: (fuzzy-split-word word)"
   (string/join (mapv remove-accent-char word))
   )
 
-(defn add-accent-word
+(defn accent->word
   "Add accent to a valid word. Always keep in mind that the input has
   to be a valid word otherwise it causes error."
   [word accent]
-  (let [comps (split-word word)
+  (let [comps (word-structure word)
         vowel (remove-accent-word (comps 1))
         nvowel (normalize vowel)
         vowel-size (count vowel)
@@ -121,29 +119,29 @@ Usage: (fuzzy-split-word word)"
      (empty? vowel) word
      (> position-ơ-ê -1)
      (string/join [(comps 0) (subs vowel 0 position-ơ-ê)
-                   (add-accent-char (nth vowel position-ơ-ê) accent)
+                   (accent->char (nth vowel position-ơ-ê) accent)
                    (subs vowel (inc position-ơ-ê))
                    (comps 2)])
      (or (= 3 vowel-size) (and (= 2 vowel-size) (not (empty? (comps 2)))))
      (string/join [(comps 0)
                    (nth vowel 0)
-                   (add-accent-char (nth vowel 1) accent)
+                   (accent->char (nth vowel 1) accent)
                    (subs vowel 2)
                    (comps 2)])
      :else (string/join [ (comps 0)
-                          (add-accent-char (nth vowel 0) accent)
+                          (accent->char (nth vowel 0) accent)
                           (subs vowel 1)
                           (comps 2)]))))
 
-(defn naive-add-mark-word
+(defn mark->word*
   [word mark]
-  (string/join (mapv (fn [c] (add-mark-char c mark))
+  (string/join (mapv (fn [c] (mark->char c mark))
                      word)))
 
-(defn refine-mark-word
+(defn refine-mark->word
   "Refine mark adding in case vowel is ươu or ưu"
   [word mark]
-  (let [comps (vec (split-word word))
+  (let [comps (vec (word-structure word))
         vowel (comps 1)
         nvowel (normalize vowel)
         vowel-size (count vowel)]
@@ -155,11 +153,11 @@ Usage: (fuzzy-split-word word)"
       word)))
 
 
-(defn add-mark-word
+(defn mark->word
   "Add mark to a valid word. Always keep in mind that the input has to
   be a valid word otherwise it causes error."
   [word mark]
-  (refine-mark-word (string/join (mapv (fn [c] (add-mark-char c mark))
+  (refine-mark->word (string/join (mapv (fn [c] (mark->char c mark))
                                        word))
                     mark)
   )
@@ -179,12 +177,12 @@ Usage: (fuzzy-split-word word)"
         first-word (subs astring 0 position)]
     [first-word last-word]))
 
-(defn add-accent-string
+(defn accent->string
   [astring accent]
   (let [[first-word last-word] (grammar-split-word astring)]
-    (string/join [first-word (add-accent-word last-word accent)])))
+    (string/join [first-word (accent->word last-word accent)])))
 
-(defn add-mark-string
+(defn mark->string
   [astring mark]
   (let [[first-word last-word] (grammar-split-word astring)]
-    (string/join [first-word (add-mark-word last-word mark)])))
+    (string/join [first-word (mark->word last-word mark)])))
