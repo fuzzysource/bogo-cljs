@@ -31,6 +31,7 @@
                     "quên" true
                     "quuên" false
                     "mươ" true
+                    "duo" true
                     }]
     (dorun (map #(is  (let [correct? (= %2 (valid-word? %1))]
                         (when (not correct?) (println %1 "false"))
@@ -95,7 +96,7 @@
 (deftest test-add-mark-string
   (is (= "mèoconrahồcấ" (add-mark-string "mèoconrahồcá" :hat))))
 
-(deftest test-rollback
+'(deftest test-rollback
   (is (= "meo" (rollback "mèo" :grave)))
   (is (= "Dăng" (rollback "Đăng" :bar)))
   (is (= "meo" (rollback "mèo" :acute)))

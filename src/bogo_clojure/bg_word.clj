@@ -14,18 +14,19 @@
 
 (def TERMINAL_CONSONANTS #{"c" "ch" "m" "n" "ng" "nh" "p" "t" ""})
 
-(def VOWELS #{ "a" "ai" "ao" "au" "ay" "e" "eo" "i" "ia" "iu"
-               "iê" "iêu" "o" "oa" "oai" "oao" "oay" "oe" "oeo"
-               "oi" "oo" "oă" "u" "ua" "ui" "uy" "uya" "uyu"
-               "uyê" "uâ" "uây" "uê" "uô" "uôi" "uơ" "y" "yê"
-               "yêu" "â" "âu" "ây" "ê" "êu" "ô" "ôi" "ă" "ơ"
-               "ơi" "ư" "ưa" "ưi" "ưu" "ươ" "ươi" "ươu" ""})
+(def VOWELS #{ "a" "ai" "ao" "au" "ay" "e" "eo" "i" "ia" "iu" "iê"
+               "ie" "iêu" "ieu" "o" "oa" "oai" "oao" "oay" "oe" "oeo"
+               "oi" "oo" "oă" "u" "ua" "ui" "uy" "uya" "uyu" "uyê"
+               "uye" "uâ" "uây" "uay" "uê" "ue" "uô" "uôi" "uoi"
+               "uơ" "y" "yê" "ye" "yêu" "yeu" "â" "âu" "ây" "ê" "êu"
+               "ô" "ôi" "ă" "ơ" "ơi" "ư" "ưa" "ưi" "ưu" "uu" "ươ" "uo"
+               "ươi" "ươu" "uou" ""})
 
 (def TERMINAL_VOWELS #{ "ai" "ao" "au" "ay" "eo" "ia" "iu" "iêu"
-                        "oai" "oao" "oay" "oeo" "oi" "ua" "ui"
-                        "uya" "uyu" "uây" "uôi" "uơ" "yêu" "âu"
-                        "ây" "êu" "ôi" "ơi" "ưa" "ưi" "ưu" "ươi"
-                        "ươu" ""})
+                        "ieu" "oai" "oao" "oay" "oeo" "oi" "ua" "ui"
+                        "uya" "uyu" "uây" "uay" "uôi" "uoi" "uơ" "uo"
+                        "yêu" "yeu" "âu" "ây" "êu" "eu" "ôi" "ơi" "ưa"
+                        "ưi" "ưu" "uu" "ươi" "ươu" "uou" ""})
 
 (defn fuzzy-split-word
   "Split a word into 3 components: first-consonant, vowel,
@@ -187,21 +188,3 @@ Usage: (fuzzy-split-word word)"
   [astring mark]
   (let [[first-word last-word] (grammar-split-word astring)]
     (string/join [first-word (add-mark-word last-word mark)])))
-
-
-
-(defn rollback
-  [word transform]
-  (let [[first-consonant vowel last-consonant] (split-word word)]
-    (cond
-      (= :bar transform)
-      (string/join [(add-mark-word first-consonant :nomark)
-                    vowel
-                    last-consonant])
-      (accent? transform)
-      (remove-accent-word word)
-      (mark? transform)
-      (string/join [first-consonant
-                    (add-mark-word vowel :nomark)
-                    last-consonant])
-      :else word)))
