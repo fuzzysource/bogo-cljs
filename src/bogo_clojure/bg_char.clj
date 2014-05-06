@@ -72,6 +72,32 @@ Avaiable accents: :grave :acute :hook :tilde :dot :none"
   (accent->char c :none)
   )
 
+(defn mark->char*
+  [char mark]
+   (case mark
+     :hat (cond
+           (contains? #{"a" "ă" "â"} char) "â"
+           (contains? #{"o" "ô" "ơ"} char) "ô"
+           :else char)
+     :breve (cond
+             (contains? #{"a" "ă" "â"} char) "ă"
+             :else char)
+     :horn (cond
+            (contains? #{"u" "ư"} char) "ư"
+            (contains? #{"o" "ô" "ơ"} char) "ơ"
+            :else char)
+     :bar (cond
+           (contains? #{"d" "đ"} char) "đ"
+           :else char)
+     :nomark (cond
+              (contains? #{"a" "ă" "â"} char) "a"
+              (contains? #{"o" "ô" "ơ"} char) "o"
+              (contains? #{"u" "ư"} char) "u"
+              (contains? #{"d" "đ"} char) "d"
+              :else char)
+     char)
+  )
+
 (defn mark->char
   "Add mark to a char.
 available marks are  :hat :breve :horn :bar :nomark
@@ -82,28 +108,7 @@ if given char is not possible to add mark, return the original char"
     (let [c (remove-accent-char (string/lower-case char))
           current-accent (get-accent-char char)]
       (accent->char (to-case-of char
-                                   (case mark
-                                     :hat (cond
-                                           (contains? #{"a" "ă" "â"} c) "â"
-                                           (contains? #{"o" "ô" "ơ"} c) "ô"
-                                           :else char)
-                                     :breve (cond
-                                             (contains? #{"a" "ă" "â"} c) "ă"
-                                             :else char)
-                                     :horn (cond
-                                            (contains? #{"u" "ư"} c) "ư"
-                                            (contains? #{"o" "ô" "ơ"} c) "ơ"
-                                            :else char)
-                                     :bar (cond
-                                           (contains? #{"d" "đ"} c) "đ"
-                                           :else char)
-                                     :nomark (cond
-                                              (contains? #{"a" "ă" "â"} c) "a"
-                                              (contains? #{"o" "ô" "ơ"} c) "o"
-                                              (contains? #{"u" "ư"} c) "u"
-                                              (contains? #{"d" "đ"} c) "d"
-                                              :else char)
-                                     char))
+                                (mark->char* c mark) )
                        current-accent))))
 
 (defn remove-mark-char
