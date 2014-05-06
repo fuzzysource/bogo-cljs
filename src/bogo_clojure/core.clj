@@ -13,21 +13,32 @@
     (get typemode key)
     :addchar))
 
+(defn process-key*
+  [key old-string new-string]
+  (if (and (= (inc (count old-string)) (count new-string))
+           (= (string/lower-case key) (str (last new-string))))
+    (str (subs new-string 0 (count old-string)) key)
+    new-string))
+
 (defn process-key
   ([astring key]
      (process-key astring key TELEX))
   ([astring key typemode]
      (let [[first-word last-word] (grammar-split-word astring)
-           action (get-action key typemode)]
-       (str first-word
-            (if (fn? action)
-              (action last-word)
-              (str last-word key))))))
+           strkey (str key)
+           lkey (string/lower-case strkey)
+           action (get-action lkey typemode)]
+       (process-key* strkey
+                     astring
+                     (str first-word
+                          (if (fn? action)
+                            (action last-word)
+                            (str last-word strkey)))))))
 
 (defn process-sequence
   ([sequence]
      (process-sequence sequence TELEX))
   ([sequence typemode]
-     (reduce (fn [word key] (process-key word (str key) typemode))
+     (reduce (fn [word key] (process-key word key typemode))
              ""
              sequence)))
