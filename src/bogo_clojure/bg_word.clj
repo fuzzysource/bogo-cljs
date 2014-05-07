@@ -212,3 +212,7 @@
   [word]
   (let [mark (vowel-of-word->mark word)]
     (mark->word word mark)))
+
+(defn refine-word
+  [word]
+  (refine-accent (refine-mark word)))

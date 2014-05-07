@@ -33,11 +33,11 @@
            lkey (string/lower-case strkey)
            action (get-action lkey typemode)]
        (str first-word
-            (process-key* strkey
-                          last-word
-                          (if (fn? action)
-                            (action last-word)
-                            (str last-word strkey)))))))
+            (refine-word (process-key* strkey
+                                       last-word
+                                       (if (fn? action)
+                                         (action last-word)
+                                         (str last-word strkey))))))))
 
 (defn process-sequence
   ;; Return the string that is resulted by typing the given sequence
