@@ -4,7 +4,6 @@
             [bogo-clojure.bg-word :refer :all]
             [bogo-clojure.bg-telex :refer :all]))
 
-
 (defn get-action
   ;; Action is a function taking in current string, make transform,
   ;; return the new string

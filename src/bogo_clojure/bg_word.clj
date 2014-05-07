@@ -211,7 +211,11 @@
 (defn refine-accent
   [word]
   (let [accent (word->accent word)]
-    (accent->word word accent)))
+    (if (not= "" (get-last-word word)) ; Solve the problem when there are some
+                                        ; deliminating characters at the end of
+                                        ; the word.
+      (accent->word word accent)
+      word)))
 
 (defn refine-mark
   [word]
