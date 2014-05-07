@@ -189,18 +189,26 @@
 
 (defn word->accent
   [word]
-  ())
+  (reduce #(if (not= :none (char->accent %2))
+             (char->accent %2)
+             %1)
+          :none
+          word))
 
-(defn word->mark
+(defn vowel-of-word->mark
   [word]
-  ())
+  (reduce #(if (not= :nomark (char->mark %2))
+             (char->mark %2)
+             %1)
+          :nomark
+          (second (word-structure word))))
 
 (defn refine-accent
   [word]
   (let [accent (word->accent word)]
-    (accent->word word)))
+    (accent->word word accent)))
 
 (defn refine-mark
   [word]
-  (let [mark (word->mark word)]
-    (mark->word word)))
+  (let [mark (vowel-of-word->mark word)]
+    (mark->word word mark)))

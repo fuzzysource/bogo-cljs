@@ -53,11 +53,11 @@
   (let [c (string/lower-case (str char))]
     (if (single-vowel? c)
       (let [vowel-index (.indexOf SINGLE-VOWELS c)]
-        ([:none :breve :hat :none :hat :none
-          :none :hat :horn :none :horn :none] (quot vowel-index 6)))
+        ([:nomark :breve :hat :nomark :hat :nomark
+          :nomark :hat :horn :nomark :horn :nomark] (quot vowel-index 6)))
       (if (= "đ" c)
         :bar
-        :none))))
+        :nomark))))
 
 (defn accent->char
   "Add mark to a character.
