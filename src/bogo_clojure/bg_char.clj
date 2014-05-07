@@ -30,23 +30,34 @@
     (string/upper-case c2)))
 
 (defn single-vowel?
-  [c]
-  (if (not= -1 (.indexOf SINGLE-VOWELS (string/lower-case c)))
-    true
-    false))
+  [char]
+  (let [c (str char)]
+    (if (not= -1 (.indexOf SINGLE-VOWELS (string/lower-case c)))
+      true
+      false)))
 
 (defn single-consonant?
   [c]
   (not  (single-vowel? c))
   )
 
-(defn get-accent-char
-  [c]
-  (let [accent-pos (.indexOf SINGLE-VOWELS (string/lower-case (str c)))
-        current-accent (mod accent-pos 6)]
-    (if (not= -1 accent-pos)
-      (ACCENTS current-accent)
+(defn char->accent
+  [char]
+  (let [c (string/lower-case (str char))]
+    (if (single-vowel? c)
+      (ACCENTS (mod (.indexOf SINGLE-VOWELS c) 6))
       :none)))
+
+(defn char->mark
+  [char]
+  (let [c (string/lower-case (str char))]
+    (if (single-vowel? c)
+      (let [vowel-index (.indexOf SINGLE-VOWELS c)]
+        ([:none :breve :hat :none :hat :none
+          :none :hat :horn :none :horn :none] (quot vowel-index 6)))
+      (if (= "đ" c)
+        :bar
+        :none))))
 
 (defn accent->char
   "Add mark to a character.
@@ -107,7 +118,7 @@ if given char is not possible to add mark, return the original char"
   (if (char? char)
     (mark->char (str char) mark)
     (let [c (remove-accent-char (string/lower-case char))
-          current-accent (get-accent-char char)]
+          current-accent (char->accent char)]
       (accent->char (to-case-of char
                                 (mark->char* c mark) )
                        current-accent))))
@@ -115,3 +126,4 @@ if given char is not possible to add mark, return the original char"
 (defn remove-mark-char
   [c]
   (mark->char c :nomark))
+
