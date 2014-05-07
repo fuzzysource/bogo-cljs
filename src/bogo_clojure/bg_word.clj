@@ -216,7 +216,9 @@
 (defn refine-mark
   [word]
   (let [mark (vowel-of-word->mark word)]
-    (mark->word word mark)))
+    (if (not= :nomark mark)
+      (mark->word word mark)
+      word)))
 
 (defn refine-word
   [word]
