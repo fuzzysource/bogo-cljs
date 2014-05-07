@@ -32,6 +32,7 @@
                     "quuên" false
                     "mươ" true
                     "duo" true
+                    "d" true
                     }]
     (dorun (map #(is  (let [correct? (= %2 (valid-word? %1))]
                         (when (not correct?) (println %1 "false"))

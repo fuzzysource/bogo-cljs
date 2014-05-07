@@ -11,6 +11,10 @@
                     "chuyejen" "chuyện"
                     "quanr" "quản"
                     "gAusa" "gẤu"
+                    "muwo" "mươ"
+                    "muow" "mươ"
+                    "chieecsdepsnhinfddepjquas" "chiếcdépnhìnđẹpquá"
+                    "dd" "đ"
                     }]
     (dorun (map #(is  (let [correct? (= %2 (process-sequence %1))]
                         (when (not correct?) (println %1 %2))

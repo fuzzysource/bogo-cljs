@@ -28,6 +28,12 @@
                         "yêu" "yeu" "âu" "ây" "êu" "eu" "ôi" "ơi" "ưa"
                         "ưi" "ưu" "uu" "ươi" "ươu" "uou" ""})
 
+(defn word-structure-when-no-accent
+  [comps]
+  (if ( = "" (first comps) (second comps))
+   (list (last comps) (second comps) "")
+    comps))
+
 (defn word-structure*
   "Split a word into 3 components: first-consonant, vowel,
   last-consonant * last-consonant: the longest substring of consonants
@@ -38,23 +44,22 @@
   [word]
   (let [rword (reverse word)]
     (mapv string/reverse
-         (reduce (fn [comps char]
-                   (let [c  (str char)]
-                     (cond
-                      (and (single-consonant? c) (= (comps 1) ""))
-                      ["" "" (str (comps 2) c)]
-                      (and (single-vowel? c) (= (comps 0) ""))
-                      ["" (str (comps 1) c) (comps 2)]
-                      :else [(str (comps 0) c) (comps 1) (comps 2)]
-                      )
-                     ))
-                 ["" "" ""]
-                 rword))
-    )
-  )
+          (word-structure-when-no-accent
+           (reduce (fn [comps char]
+                     (let [c  (str char)]
+                       (cond
+                        (and (single-consonant? c) (= (comps 1) ""))
+                        ["" "" (str (comps 2) c)]
+                        (and (single-vowel? c) (= (comps 0) ""))
+                        ["" (str (comps 1) c) (comps 2)]
+                        :else [(str (comps 0) c) (comps 1) (comps 2)]
+                        )
+                       ))
+                   ["" "" ""]
+                   rword)))))
 
 (defn word-structure
-  "Similar to fuzzy-split-word but this function is more appropriate
+  "Similar to word-structure* but this function is more appropriate
   when processing qu and gi"
   [word]
   (let [comps (word-structure* word)
