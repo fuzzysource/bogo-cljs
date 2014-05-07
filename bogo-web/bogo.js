@@ -1,52 +1,79 @@
-var UserTextInput = document.getdomsByTagName("input");
-var UserTextArea = document.getdomsByTagName("textarea");
-var UserTextEnvironment = UserTextInput.concat(UserTextArea);
+var url = "ws://0.0.0.0:8080";
+var UserTextFields = $("input, textarea");
 
-var bgBackspace = (function () {
-    var ev = new KeyboardEvent("keydown",);
-    ev.initCustom
-
-}) ()
-
-var bgCountBackSpaces = function (oldString, newString) {
-    var i;
-    while (oldString[i] === newString[i]) {
-        i++;
-    }
-    return (oldString.length - i);
+var connectBogoServer = function (url) {
+  var bogo = new WebSocket(url);
+  bogo.onopen = function (ev) {
+    this.send("CHAO\nf");
+  }
+  return bogo;
 }
 
-var bgDiff = function (oldString, newString) {
-    var i;
-    while (oldString[i] === newString[i]) {
-        i++;
-    }
-    return substring(newString, i)
+var bogo = connectBogoServer(url);
+
+var bgProcessKey = function (dom, char) {
+  var content = $(dom).val();
+  var oldString = dom.oldString;
+  bogo.send(oldString + "\n" + char);
+  bogo.onmessage = function (ev) {
+    var newString = ev.data;
+    var splitIndex = content.length - oldString.length;
+    $(dom).val(content.substr(0, splitIndex) + newString);
+    dom.oldString = newString;
+  }
 }
 
-var bgSendBackspaces = function (dom, num) {
-    var i;
-    for (i = 0; i < num; i++) {
-        dom.
-    }
+var isCharacter = function (key) {
+  if ((key.length > 1) || (key == " "))
+    return false;
+  return true;
 }
 
-var initBogo(dom) {
-    dom.currentString = "";
-    dom.onkeypress = function (ev) {
-        var char = String.fromCharCode(ev.charCode);
-        var oldString = this.currentString;
-        var newString = bgProcessKey(this.oldString, char);
-        sendBackspace(bgCountBackSpaces(oldString, newString));
-        sendNewChar(this, bgDiff(oldString, newString));
-    }
+var isBackspace = function (key) {
+  return (key === "Backspace")
 }
 
-UserTextEnvironment.forEach(function(dom) {
-    e.addEventListioner("focus", function (ev) {
-        initBogo(this);
-    });
-    e.addEventListioner("blur", function (ev) {
-        clearBogo(this);
-    });
-})
+var isSpecialKey = function (ev) {
+  return (ev.altKey || ev.ctrlKey || ev.metaKey)
+}
+
+var hasSelectedText = function (dom) {
+  var selectedText = $(dom).val().slice(dom.selectionStart, dom.selectionEnd);
+  return selectedText;
+}
+
+var startBogo = function (dom) {
+  dom.oldString = "";
+  var oldString = dom.oldString;
+
+  $(document).bind("keypress", function (ev) {
+    if (hasSelectedText(dom)){
+      dom.oldString = "";
+      return true;
+    }
+
+    if (isSpecialKey (ev))
+      return true;
+    if (isCharacter (ev.key)){
+      ev.preventDefault();
+      bgProcessKey(dom, ev.key);
+    } else {
+      if (isBackspace (ev.key)) {
+        dom.oldString = oldString.substr(0, oldString.length - 1)
+      }
+        dom.oldString = "";
+    }
+  });
+}
+
+var stopBogo = function (dom) {
+  dom.oldString = "";
+  $(document).unbind("keypress");
+}
+
+UserTextFields.focus(function (ev) {
+  startBogo(this);
+});
+UserTextFields.blur(function (ev) {
+  stopBogo(this);
+});
