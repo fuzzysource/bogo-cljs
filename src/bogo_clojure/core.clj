@@ -32,9 +32,9 @@
            strkey (str key)
            lkey (string/lower-case strkey)
            action (get-action lkey typemode)]
-       (process-key* strkey
-                     astring
-                     (str first-word
+       (str first-word
+            (process-key* strkey
+                          last-word
                           (if (fn? action)
                             (action last-word)
                             (str last-word strkey)))))))

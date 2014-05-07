@@ -186,3 +186,21 @@
   [astring mark]
   (let [[first-word last-word] (grammar-split-word astring)]
     (string/join [first-word (mark->word last-word mark)])))
+
+(defn word->accent
+  [word]
+  ())
+
+(defn word->mark
+  [word]
+  ())
+
+(defn refine-accent
+  [word]
+  (let [accent (word->accent word)]
+    (accent->word word)))
+
+(defn refine-mark
+  [word]
+  (let [mark (word->mark word)]
+    (mark->word word)))
