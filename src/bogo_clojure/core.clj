@@ -14,6 +14,8 @@
     :addchar))
 
 (defn process-key*
+  ;; capitalize the last character if the rollback was triggered by an
+  ;; upper-case character
   [key old-string new-string]
   (if (and (= (inc (count old-string)) (count new-string))
            (= (string/lower-case key) (str (last new-string))))
@@ -21,6 +23,8 @@
     new-string))
 
 (defn process-key
+  ;; Return a new string that is resulted by typing new character into
+  ;; the old one.
   ([astring key]
      (process-key astring key TELEX))
   ([astring key typemode]
@@ -36,6 +40,8 @@
                             (str last-word strkey)))))))
 
 (defn process-sequence
+  ;; Return the string that is resulted by typing the given sequence
+  ;; of keys.
   ([sequence]
      (process-sequence sequence TELEX))
   ([sequence typemode]

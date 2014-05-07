@@ -78,6 +78,7 @@ Avaiable accents: :grave :acute :hook :tilde :dot :none"
      :hat (cond
            (contains? #{"a" "ă" "â"} char) "â"
            (contains? #{"o" "ô" "ơ"} char) "ô"
+           (contains? #{"e"} char) "ê"
            :else char)
      :breve (cond
              (contains? #{"a" "ă" "â"} char) "ă"

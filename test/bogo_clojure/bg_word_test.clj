@@ -74,6 +74,7 @@
   (is (= "phất" (mark->word "phát" :hat)))
   (is (= "sắc" (mark->word "sác" :breve)))
   (is (= "Duọc" (mark->word "Được" :nomark)))
+  (is (= "chuyê" (mark->word "chuye" :hat)))
   )
 
 (deftest test-get-last-word

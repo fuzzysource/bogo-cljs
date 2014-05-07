@@ -12,6 +12,7 @@
                :breve ["a" "ă" "â"]
                :horn ["o" "ơ" "ô"])
    "o" (mark-> "o" :hat ["o" "ô" "ơ"])
+   "e" (mark-> "e" :hat ["e" "ê"])
    "d" (mark-> "d"
                :bar ["d" "đ"])
    "r" (accent-> "r"
