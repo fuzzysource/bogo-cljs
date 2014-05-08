@@ -1,5 +1,7 @@
 var url = "ws://0.0.0.0:8080";
-var UserTextFields = $("input, textarea");
+var inputDoms = Array.prototype.slice.call(document.getElementsByTagName("input"));
+var textareaDoms = Array.prototype.slice.call(document.getElementsByTagName("textarea"));
+var textDoms = inputDoms.concat(textareaDoms);
 
 var connectBogoServer = function (url) {
   var bogo = new WebSocket(url);
@@ -9,16 +11,17 @@ var connectBogoServer = function (url) {
   return bogo;
 }
 
-var bogo = connectBogoServer(url);
+document.bogo = connectBogoServer(url);
 
 var bgProcessKey = function (dom, char) {
-  var content = $(dom).val();
+  var bogo = document.bogo;
+  var content = dom.value;
   var oldString = dom.oldString;
   bogo.send(oldString + "\n" + char);
   bogo.onmessage = function (ev) {
     var newString = ev.data;
     var splitIndex = content.length - oldString.length;
-    $(dom).val(content.substr(0, splitIndex) + newString);
+    dom.value = content.substr(0, splitIndex) + newString;
     dom.oldString = newString;
   }
 }
@@ -38,15 +41,13 @@ var isSpecialKey = function (ev) {
 }
 
 var hasSelectedText = function (dom) {
-  var selectedText = $(dom).val().slice(dom.selectionStart, dom.selectionEnd);
+  var selectedText = dom.value.slice(dom.selectionStart, dom.selectionEnd);
   return selectedText;
 }
 
-var startBogo = function (dom) {
-  dom.oldString = "";
-  var oldString = dom.oldString;
-
-  $(document).bind("keypress", function (ev) {
+var keypressListener = function (ev) {
+    var dom = document.activeElement;
+    var oldString = dom.oldString;
     if (hasSelectedText(dom)){
       dom.oldString = "";
       return true;
@@ -59,21 +60,28 @@ var startBogo = function (dom) {
       bgProcessKey(dom, ev.key);
     } else {
       if (isBackspace (ev.key)) {
-        dom.oldString = oldString.substr(0, oldString.length - 1)
+        dom.oldString = dom.oldString.substr(0, oldString.length - 1)
       }
         dom.oldString = "";
     }
-  });
+}
+
+var startBogo = function (dom) {
+  dom.oldString = "";
+  document.addEventListener("keypress", keypressListener);
 }
 
 var stopBogo = function (dom) {
   dom.oldString = "";
-  $(document).unbind("keypress");
+  document.removeEventListener("keypress",keypressListener);
 }
 
-UserTextFields.focus(function (ev) {
-  startBogo(this);
+textDoms.forEach(function (dom) {
+  dom.onfocus = function(ev) {
+    startBogo(this);
+  }
+  dom.onblur = function(ev) {
+    stopBogo(this);
+  }
 });
-UserTextFields.blur(function (ev) {
-  stopBogo(this);
-});
+
