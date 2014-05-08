@@ -42,4 +42,4 @@ Các tạo kiểu gõ được thể hiện trong file `bg_telex.clj`.
     lein test
 ```
 
-[bogo]: https://github.com/fuzzysource/bogo-clojure/blob/master/bogo-web/bookmark
+[bogo]: https://raw.githubusercontent.com/fuzzysource/bogo-clojure/master/bogo-web/bookmark
