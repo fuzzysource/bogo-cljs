@@ -1,4 +1,4 @@
-(ns bogo-clojure.bg-macro
+(ns bogo-clojure.bg-action
   (:gen-class)
   (:require [clojure.string :as string]
             [bogo-clojure.bg-word :refer :all]

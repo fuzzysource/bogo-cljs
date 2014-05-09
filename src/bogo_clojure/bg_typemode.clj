@@ -1,8 +1,8 @@
-(ns bogo-clojure.bg-telex
+(ns bogo-clojure.bg-typemode
   (:gen-class)
   (:require [clojure.string :as string]
             [bogo-clojure.bg-word :refer :all]
-            [bogo-clojure.bg-macro :refer :all]))
+            [bogo-clojure.bg-action :refer :all]))
 
 (def TELEX
   {
