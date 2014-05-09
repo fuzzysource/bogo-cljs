@@ -43,6 +43,22 @@
       (str (rollback new-word accent)
            key))))
 
+(defn ending?
+  [word part]
+  (let [last-index (.lastIndexOf word part)]
+    (if (= -1 last-index)
+      false
+      (if (= (count word) (+ last-index (count part)))
+        true
+        false))))
+
+(defn process-fast-typing
+  [word added-chars keys]
+  (if (ending? word added-chars)
+     (str (subs word 0 (.lastIndexOf word added-chars))
+          keys)
+     (str word added-chars)))
+
 (defmacro mark->
   [key & pairs]
   `(fn [~'word]
@@ -61,3 +77,10 @@
   [key accent]
   `(fn [word#]
      (process-accent word# ~accent ~key)))
+
+(defmacro add->
+  [key chars]
+  `(fn [~'word]
+     (process-fast-typing ~'word ~chars ~key)))
+
+
