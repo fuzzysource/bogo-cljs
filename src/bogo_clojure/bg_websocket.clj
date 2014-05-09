@@ -10,7 +10,7 @@
 (defn process!
   [channel data]
   (let [[old-string key] (string/split-lines data)
-        new-string (bogo/process-key old-string key TELEX)]
+        new-string (bogo/process-key old-string key @typemode)]
     (println old-string key new-string)
     (send! channel new-string)
     ))
@@ -28,6 +28,6 @@
 (defn -main
   [& args]
   (if (not (empty? args))
-    (reset! typemode (eval (symbol "bogo-clojure.bg-typemode" (string/uppercase (string/join args)))))
+    (reset! typemode (eval (symbol "bogo-clojure.bg-typemode" (string/upper-case (string/join args)))))
     true)
   (run-server handler {:port 8080}))

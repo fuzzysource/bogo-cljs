@@ -60,3 +60,31 @@
    "]" (add-> "]" "ư")
    })
 
+
+(def VNI
+  {
+   "1" (accent-> "1"
+                 :acute)
+   "2" (accent-> "2"
+                 :grave)
+   "3" (accent-> "3"
+                 :hook)
+   "4" (accent-> "4"
+                 :tilde)
+   "5" (accent-> "5"
+                 :dot)
+   "0" (accent-> "0"
+                 :none)
+   "6" (mark-> "6"
+               :hat ["e" "ê"]
+               :hat ["o" "ô" "ơ"])
+   "7" (mark-> "7"
+               :horn ["o" "ô" "ơ"]
+               :horn ["u" "ư" "uo" "ươ"])
+
+   "8" (mark-> "8"
+               :breve ["a" "ă" "â"])
+   "9" (mark-> "9"
+               :bar ["d" "đ"])
+   })
+
