@@ -1,5 +1,4 @@
 (ns bogo-clojure.bg-typemode
-  (:gen-class)
   (:require [clojure.string :as string]
             [bogo-clojure.bg-word :refer :all]
             [bogo-clojure.bg-action :refer :all]))
@@ -39,7 +38,7 @@
             (not= case-a word) case-a
             (not= case-ou word) case-ou
             (not= "ư" (normalize (str (last word)))) (str word "ư")
-            :else (str (rollback word :horn) "w"))))
+            :else (str (rollback-transformation word :horn) "w"))))
    "o" (mark-> "o" :hat ["o" "ô" "ơ"])
    "e" (mark-> "e" :hat ["e" "ê"])
    "d" (mark-> "d"

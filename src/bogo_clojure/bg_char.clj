@@ -1,6 +1,6 @@
 (ns bogo-clojure.bg-char
-  (:gen-class)
   (:require [clojure.string :as string]))
+
 (def SINGLE-VOWELS (str "àáảãạaằắẳẵặăầấẩẫậâèéẻẽẹeềếểễệêìíỉĩịi"
                               "òóỏõọoồốổỗộôờớởỡợơùúủũụuừứửữựưỳýỷỹỵy"))
 (def SINGLE-CONSONANTS "bcdghjklmnpqrstvwxzđ")

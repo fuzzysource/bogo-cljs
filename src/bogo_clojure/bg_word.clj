@@ -1,5 +1,4 @@
 (ns bogo-clojure.bg-word
-  (:gen-class)
   (:require [clojure.string :as string]
             [bogo-clojure.bg-char :refer :all]))
 
@@ -107,6 +106,7 @@
       false)))
 
 (defn remove-accent-word
+  "Remove accent from word"
   [word]
   (string/join (mapv remove-accent-char word))
   )
@@ -176,6 +176,8 @@
     ))
 
 (defn grammar-split-word
+  "Split the string into 2 parts, the later part is the longest valid word
+  at the end of the string, the former part is the remaining."
   [astring]
   (let [last-word (get-last-word astring)
         position (- (count astring) (count last-word))
@@ -183,16 +185,20 @@
     [first-word last-word]))
 
 (defn accent->string
+  "Add accent to a string"
   [astring accent]
   (let [[first-word last-word] (grammar-split-word astring)]
     (string/join [first-word (accent->word last-word accent)])))
 
 (defn mark->string
+  "Add mark to a string"
   [astring mark]
   (let [[first-word last-word] (grammar-split-word astring)]
     (string/join [first-word (mark->word last-word mark)])))
 
 (defn word->accent
+  "Determin the accent in the word. Obviously, one word has one accent which is
+  added into its vowel"
   [word]
   (reduce #(if (not= :none (char->accent %2))
              (char->accent %2)
@@ -201,6 +207,7 @@
           word))
 
 (defn vowel-of-word->mark
+  "Determine the mark applied to the vowel part of the word"
   [word]
   (reduce #(if (not= :nomark (char->mark %2))
              (char->mark %2)
@@ -225,5 +232,8 @@
       word)))
 
 (defn refine-word
+  "When some accents, marks or new char is applied to the original word, the position
+  of marks or accents can be wrong. This function fix these mistakes to give a vietnamese
+  valid word"
   [word]
   (refine-accent (refine-mark word)))
