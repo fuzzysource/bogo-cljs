@@ -1,4 +1,7 @@
-# bogo-clojure
+# bogo-cljs
+
+**bogo-cljs** là thư viện xử lý gõ tiếng Việt viết bằng ClojureScript,
+biên dịch sang Javascript để tích hợp vào website.
 
 ## Cài đặt
 
