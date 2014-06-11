@@ -1,10 +1,17 @@
-(defproject bogo-clojure "0.1.0-SNAPSHOT"
+(defproject bogo-cljs "0.1.0-SNAPSHOT"
   :description "Vietnamese typing engine"
   :url "http://github.com/fuzzysource/bogo-clojure"
-  :license {:name "General Public License"
-            :url "https://www.gnu.org/copyleft/gpl.html"}
-  :dependencies [[org.clojure/clojure "1.5.1"]
-                 [http-kit "2.1.16"]]
-  :main ^:skip-aot bogo-clojure.bg-websocket
-  :target-path "target/%s"
-  :profiles {:uberjar {:aot :all}})
+  :license {:name "Eclipse Public License"
+            :url "http://www.eclipse.org/legal/epl-v10.html"}
+  :dependencies [[org.clojure/clojure "1.6.0"]
+                 [org.clojure/clojurescript "0.0-2227"]]
+  :plugins [[lein-cljsbuild "1.0.3"]]
+  :cljsbuild {:builds
+               [{
+                 :source-paths ["src"]
+
+                 ;; Google Closure Compiler options
+                 :compiler {;; the name of emitted JS script file
+                           :output-to "build/bogo.js"
+                           :optimizations :whitespace
+                           :pretty-print true}}]})

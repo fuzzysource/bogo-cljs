@@ -1,6 +1,14 @@
-(ns bogo-clojure.bg-word
+(ns bogo-cljs.bg-word
   (:require [clojure.string :as string]
-            [bogo-clojure.bg-char :refer :all]))
+            [bogo-cljs.bg-char :refer [single-consonant?
+                                       single-vowel?
+                                       accent->char
+                                       mark->char
+                                       remove-accent-char
+                                       remove-mark-char
+                                       char->accent
+                                       char->mark
+                                       ]]))
 
 ;;; This namespace includes function to process single **VALID**
 ;;; vietnamese words. Any words serving as parameter of functions in
@@ -75,7 +83,7 @@
 (defn normalize
   "Lower case and remove any accent"
   [word]
-  (reduce #(str %1 (string/lower-case (remove-accent-char %2)))
+  (reduce #(+ %1 (.toLowerCase (remove-accent-char %2)))
           ""
           word))
 
@@ -137,6 +145,8 @@
                           (accent->char (nth vowel 0) accent)
                           (subs vowel 1)
                           (comps 2)]))))
+
+(normalize "lOng")
 
 (defn mark->word*
   [word mark]
@@ -200,19 +210,19 @@
   "Determin the accent in the word. Obviously, one word has one accent which is
   added into its vowel"
   [word]
-  (reduce #(if (not= :none (char->accent %2))
+  (reduce #(if (not= "none" (char->accent %2))
              (char->accent %2)
              %1)
-          :none
+          "none"
           word))
 
 (defn vowel-of-word->mark
   "Determine the mark applied to the vowel part of the word"
   [word]
-  (reduce #(if (not= :nomark (char->mark %2))
+  (reduce #(if (not= "nomark" (char->mark %2))
              (char->mark %2)
              %1)
-          :nomark
+          "nomark"
           (second (word-structure word))))
 
 (defn refine-accent
@@ -227,7 +237,7 @@
 (defn refine-mark
   [word]
   (let [mark (vowel-of-word->mark word)]
-    (if (not= :nomark mark)
+    (if (not= "nomark" mark)
       (mark->word word mark)
       word)))
 

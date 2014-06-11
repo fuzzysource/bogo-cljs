@@ -1,7 +1,12 @@
-(ns bogo-clojure.bg-action
+(ns bogo-cljs.bg-action
   (:require [clojure.string :as string]
-            [bogo-clojure.bg-word :refer :all]
-            [bogo-clojure.bg-char :refer :all]))
+            [bogo-cljs.bg-word :refer [normalize
+                                       word-structure
+                                       mark->word
+                                       accent->word
+                                       remove-accent-word]]
+            [bogo-cljs.bg-char :refer [accent?
+                                       mark?]]))
 
 (defn has-char?
   "Test wether the given word has at least one character in the charset"
@@ -64,35 +69,5 @@
           keys)
      (str word added-chars)))
 
-(defmacro mark->
-  "This macro create a mark-adding function associating with the enter key.
-  Pairs describes the effected parts of the word and the
-  their accompanying transformations"
-  [key & pairs]
-  `(fn [~'word]
-     ~(concat '(cond)
-              (loop [mark-set pairs
-                     actions  '()]
-                (if (nil? mark-set)
-                  actions
-                  (recur (next (next mark-set))
-                         (concat actions
-                                 `((has-char? ~'word ~(second mark-set))
-                                   (process-mark ~'word ~(first mark-set) ~key))))))
-              `(:else (str ~'word ~key)))))
-
-(defmacro accent->
-  "This macro create a accent-adding function associating with the enter key.
-  Pairs describes the effected parts of the word and the
-  their accompanying transformations"
-  [key accent]
-  `(fn [word#]
-     (process-accent word# ~accent ~key)))
-
-(defmacro add->
-  "Create a function that add new chars at the end of the original word."
-  [key chars]
-  `(fn [~'word]
-     (process-fast-typing ~'word ~chars ~key)))
 
 
