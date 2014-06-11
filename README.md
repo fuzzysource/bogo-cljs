@@ -1,45 +1,21 @@
 # bogo-clojure
 
-## THỬ NGHIỆM
+## Cài đặt
 
-### VỚI REPL
-
-* Clone và  `lein repl`
-* Thử
-```clojure
-    (ns bogo-clojure.core) ; Bước đầu tiên.
-    (process-key "meo" "f") ; => mèo
-    (process-key "mèo" "f") ; => meof
-    (process-sequence "meof") ; => mèo
-    (process-sequence "muwo") ; => mươ
-```
-
-### VỚI TRÌNH DUYỆT
-
-Phiên bản này chỉ mang tính thử nghiệm và "cho vui", sử dụng web
-socket để trao đổi data giữa trình duyệt và engine.
-
-* Chạy `lein run`.
-
-Tới đây có 2 cách để tiếp tục:
-
-* Cách 1: Mở file index.html trong thư mục `bogo-web`. Tắt hết các bộ gõ đang
-  khác hoạt động.
-* Cách 2: Tạo một bookmark với location là nội dung dưới tại [link này][bogo]. này lại
-  và vào trang web sử dụng textarea. vnexpress.net, bbc.co.uk. :))
+### VỚI ClojureScript REPL
 
 
-At this moment, the key that triggers transformation must be a lower
-character.
+### Với browser
+Compile và thêm bogo.js vào script tag. Thử ngiệm với javascript console.
 
-## TẠO KIỂU GÕ
+    bogo.process_key("meo", "f")
 
-Các tạo kiểu gõ được thể hiện trong file `bg_telex.clj`.
+## License
 
-## TEST
-
-```
-    lein test
-```
-
-[bogo]: https://raw.githubusercontent.com/fuzzysource/bogo-clojure/master/bogo-web/bookmark
+    Copyright (c) Fuzzysource. All rights reserved. The use and
+    distribution terms for this software are covered by the Eclipse
+    Public License 1.0 (http://opensource.org/licenses/eclipse-1.0.php)
+    which can be found in the file epl-v10.html at the root of this
+    distribution. By using this software in any fashion, you are
+    agreeing to be bound by the terms of this license. You must
+    not remove this notice, or any other, from this software.

@@ -27,7 +27,7 @@
   "Return a new string that is resulted by typing new character into
   the old one."
   ([astring key]
-   (processKey astring key TELEX))
+   (process_key astring key TELEX))
   ([astring key typemode]
    (let [[first-word last-word] (grammar-split-word astring)
          strkey (str key)
@@ -44,8 +44,8 @@
   "Return the string that is resulted by typing the given sequence
   of keys."
   ([sequence]
-   (process-sequence sequence TELEX))
+   (process_sequence sequence TELEX))
   ([sequence typemode]
-   (reduce (fn [word key] (processKey word key typemode))
+   (reduce (fn [word key] (process_key word key typemode))
            ""
            sequence)))
