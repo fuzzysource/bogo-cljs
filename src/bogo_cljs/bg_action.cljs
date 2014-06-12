@@ -21,16 +21,16 @@
   [word transform]
   (let [[first-consonant vowel last-consonant] (word-structure word)]
     (cond
-      (= :bar transform)
-      (string/join [(mark->word first-consonant :nomark)
-                    vowel
-                    last-consonant])
+      (= "bar" transform)
+      (string/join [(mark->word first-consonant "nomark")
+                  vowel
+                  last-consonant])
       (accent? transform)
       (remove-accent-word word)
       (mark? transform)
       (string/join [first-consonant
-                    (mark->word vowel :nomark)
-                    last-consonant])
+                  (mark->word vowel "nomark")
+                  last-consonant])
       :else word)))
 
 (defn process-mark
@@ -39,7 +39,7 @@
   (let [new-word (mark->word word mark)]
     (if (not= new-word word)
       new-word
-      (str (rollback-transformation new-word mark) key))))
+      (+ (rollback-transformation new-word mark) key))))
 
 (defn process-accent
   "Process the case when the key entered trigger a accent transformation"
@@ -47,7 +47,7 @@
   (let [new-word (accent->word word accent)]
     (if (not= new-word word)
       new-word
-      (str (rollback-transformation new-word accent)
+      (+ (rollback-transformation new-word accent)
            key))))
 
 (defn word-ends-with?
@@ -56,7 +56,7 @@
   (let [last-index (.lastIndexOf word part)]
     (if (= -1 last-index)
       false
-      (if (= (count word) (+ last-index (count part)))
+      (if (= (.-length word) (+ last-index (.-length part)))
         true
         false))))
 
@@ -65,9 +65,9 @@
   Telex typing mode, press ] will inserts ư instead of the original key."
   [word added-chars keys]
   (if (word-ends-with? word added-chars)
-     (str (subs word 0 (.lastIndexOf word added-chars))
+     (+ (subs word 0 (.lastIndexOf word added-chars))
           keys)
-     (str word added-chars)))
+     (+ word added-chars)))
 
 
 

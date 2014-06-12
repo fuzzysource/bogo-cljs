@@ -72,10 +72,10 @@
   (let [comps (word-structure* word)
         last-comp0 (str (last (nth comps 0)))
         first-comp1 (str (first (nth comps 1)))]
-    (if (or (and (= "q" (string/lower-case last-comp0))
-                 (= "u" (string/lower-case first-comp1)))
-            (and (= "g" (string/lower-case last-comp0))
-                 (= "i" (string/lower-case first-comp1))
+    (if (or (and (= "q" (.toLowerCase last-comp0))
+                 (= "u" (.toLowerCase first-comp1)))
+            (and (= "g" (.toLowerCase last-comp0))
+                 (= "i" (.toLowerCase first-comp1))
                  (> (count (nth comps 1)) 1)))
       [(str (nth comps 0) first-comp1) (subs (nth comps 1) 1) (nth comps 2)]
       comps)))
@@ -126,7 +126,7 @@
   (let [comps (word-structure word)
         vowel (remove-accent-word (comps 1))
         nvowel (normalize vowel)
-        vowel-size (count vowel)
+        vowel-size (.-length vowel)
         position-ơ-ê (+ 1 (.indexOf nvowel "ơ") (.indexOf nvowel "ê"))]
     (cond
      (empty? vowel) word
@@ -146,8 +146,6 @@
                           (subs vowel 1)
                           (comps 2)]))))
 
-(normalize "lOng")
-
 (defn mark->word*
   [word mark]
   (string/join (mapv (fn [c] (mark->char c mark))
@@ -159,7 +157,7 @@
   (let [comps (vec (word-structure word))
         vowel (comps 1)
         nvowel (normalize vowel)
-        vowel-size (count vowel)]
+        vowel-size (.-length vowel)]
     (if (or (= "ưư" nvowel) (= "ươư" nvowel))
       (string/join [(comps 0)
                     (subs vowel 0 (dec vowel-size))
@@ -190,7 +188,7 @@
   at the end of the string, the former part is the remaining."
   [astring]
   (let [last-word (get-last-word astring)
-        position (- (count astring) (count last-word))
+        position (- (.-length astring) (.-length last-word))
         first-word (subs astring 0 position)]
     [first-word last-word]))
 

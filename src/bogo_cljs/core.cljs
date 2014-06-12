@@ -12,37 +12,36 @@
   [key typemode]
   (if (contains? typemode key)
     (get typemode key)
-    :addchar))
+    "addchar"))
 
 (defn process-key*
   "Capitalize the last character if the rollback was triggered by an
   upper-case character"
   [key old-string new-string]
-  (if (and (= (inc (count old-string)) (count new-string))
-           (= (string/lower-case key) (str (last new-string))))
-    (str (subs new-string 0 (count old-string)) key)
-    new-string))
+  (let [old-length (.-length old-string)
+        new-length (.-length new-string)]
+    (if (and (= (dec old-length) new-length)
+             (= (.toLowerCase key) (aget new-string (dec new-length))))
+      (+ (.substring new-string 0 (.-length old-string)) key)
+      new-string)))
 
 (defn ^:export process_key
-  "Return a new string that is resulted by typing new character into
-  the old one."
+  "Return new string composed by the current string and the key pressed."
   ([astring key]
    (process_key astring key TELEX))
   ([astring key typemode]
    (let [[first-word last-word] (grammar-split-word astring)
-         strkey (str key)
-         lkey (string/lower-case strkey)
+         lkey (.toLowerCase key)
          action (get-action lkey typemode)]
-     (str first-word
-          (refine-word (process-key* strkey
-                                             last-word
-                                             (if (fn? action)
-                                               (action last-word)
-                                               (str last-word strkey))))))))
+     (+ first-word
+          (refine-word (process-key* key
+                                     last-word
+                                     (if (fn? action)
+                                       (action last-word)
+                                       (+ last-word key))))))))
 
 (defn ^:export process_sequence
-  "Return the string that is resulted by typing the given sequence
-  of keys."
+  "Return the new string composed by typing a sequence of keys."
   ([sequence]
    (process_sequence sequence TELEX))
   ([sequence typemode]

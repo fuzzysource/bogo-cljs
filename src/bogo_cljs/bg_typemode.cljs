@@ -43,7 +43,7 @@
             (not= case-a word) case-a
             (not= case-ou word) case-ou
             (not= "ư" (normalize (str (last word)))) (str word "ư")
-            :else (str (rollback-transformation word "horn") "w"))))
+            :else (+ (rollback-transformation word "horn") "w"))))
    "o" (mark-> "o" "hat" ["o" "ô" "ơ"])
    "e" (mark-> "e" "hat" ["e" "ê"])
    "d" (mark-> "d"

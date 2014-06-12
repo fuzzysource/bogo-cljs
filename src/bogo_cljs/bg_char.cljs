@@ -31,15 +31,14 @@
   "Change case of c2 to which of c1"
   [c1 c2]
   (if (lower-case? c1)
-    (string/lower-case c2)
-    (string/upper-case c2)))
+    (.toLowerCase c2)
+    (.toUperCase c2)))
 
 (defn single-vowel?
-  [char]
-  (let [c (str char)]
-    (if (not= -1 (.indexOf SINGLE-VOWELS (string/lower-case c)))
-      true
-      false)))
+  [c]
+  (if (not= -1 (.indexOf SINGLE-VOWELS (.toLowerCase c)))
+    true
+    false))
 
 (defn single-consonant?
   [c]
@@ -70,12 +69,12 @@
   [char accent]
   (if (single-vowel? char)
     (let [ new-accent-index (.indexOf ACCENTS accent)
-           c (string/lower-case char)
+           c (.toLowerCase char)
            vowel-index (.indexOf SINGLE-VOWELS c)
            current-accent-index (mod vowel-index 6)
            ]
       (to-case-of char
-                  (str (get SINGLE-VOWELS
+                  (+ (get SINGLE-VOWELS
                             (+ vowel-index (- new-accent-index
                                               current-accent-index))))))
     char))
@@ -117,7 +116,7 @@
 available marks are  :hat :breve :horn :bar :nomark
 if given char is not possible to add mark, return the original char"
   [char mark]
-  (let [c (remove-accent-char (string/lower-case char))
+  (let [c (remove-accent-char (.toLowerCase char))
         current-accent (char->accent char)]
     (accent->char (to-case-of char
                               (mark->char* c mark) )
