@@ -13,5 +13,5 @@
                  ;; Google Closure Compiler options
                  :compiler {;; the name of emitted JS script file
                            :output-to "build/bogo.js"
-                           :optimizations :advanced
+                           :optimizations :whitespace
                            :pretty-print true}}]})

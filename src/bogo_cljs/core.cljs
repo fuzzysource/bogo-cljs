@@ -34,11 +34,11 @@
          lkey (.toLowerCase key)
          action (get-action lkey typemode)]
      (+ first-word
-          (refine-word (process-key* key
-                                     last-word
-                                     (if (fn? action)
-                                       (action last-word)
-                                       (+ last-word key))))))))
+        (refine-word (process-key* key
+                                   last-word
+                                   (if (fn? action)
+                                     (action last-word)
+                                     (+ last-word key))))))))
 
 (defn ^:export process_sequence
   "Return the new string composed by typing a sequence of keys."

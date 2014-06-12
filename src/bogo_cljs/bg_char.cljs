@@ -32,7 +32,7 @@
   [c1 c2]
   (if (lower-case? c1)
     (.toLowerCase c2)
-    (.toUperCase c2)))
+    (.toUpperCase c2)))
 
 (defn single-vowel?
   [c]
