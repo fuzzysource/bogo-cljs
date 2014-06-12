@@ -74,9 +74,8 @@
            current-accent-index (mod vowel-index 6)
            ]
       (to-case-of char
-                  (+ (get SINGLE-VOWELS
-                            (+ vowel-index (- new-accent-index
-                                              current-accent-index))))))
+                  (get SINGLE-VOWELS
+                       (-> new-accent-index (- current-accent-index) (+ vowel-index)))))
     char))
 
 (defn remove-accent-char

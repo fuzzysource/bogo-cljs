@@ -87,7 +87,7 @@
   "Lower case and remove any accent"
 
   [word]
-  (reduce #(+ %1 (.toLowerCase (remove-accent-char %2)))
+  (reduce #(.concat %1 (.toLowerCase (remove-accent-char %2)))
           ""
           word))
 

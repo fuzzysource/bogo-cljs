@@ -39,7 +39,7 @@
   (let [new-word (mark->word word mark)]
     (if (not= new-word word)
       new-word
-      (+ (rollback-transformation new-word mark) key))))
+      (.concat (rollback-transformation new-word mark) key))))
 
 (defn process-accent
   "Process the case when the key entered trigger a accent transformation"
@@ -47,7 +47,7 @@
   (let [new-word (accent->word word accent)]
     (if (not= new-word word)
       new-word
-      (+ (rollback-transformation new-word accent)
+      (.concat (rollback-transformation new-word accent)
            key))))
 
 (defn word-ends-with?
@@ -65,9 +65,9 @@
   Telex typing mode, press ] will inserts ư instead of the original key."
   [word added-chars keys]
   (if (word-ends-with? word added-chars)
-     (+ (subs word 0 (.lastIndexOf word added-chars))
+     (.concat (subs word 0 (.lastIndexOf word added-chars))
           keys)
-     (+ word added-chars)))
+     (.concat word added-chars)))
 
 
 

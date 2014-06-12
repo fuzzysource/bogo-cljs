@@ -16,8 +16,11 @@
     "addchar"))
 
 (defn process-key*
-  "Capitalize the last character if the rollback was triggered by an
-  upper-case character"
+
+  "When typing a character to rollback the transformation, the new
+  character added should be in the same case as the entered keys.
+  For example: ư + W -> uW rather than uw"
+
   [key old-string new-string]
   (let [old-length (.-length old-string)
         new-length (.-length new-string)]
