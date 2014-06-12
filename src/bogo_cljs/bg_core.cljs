@@ -1,4 +1,4 @@
-(ns bogo
+(ns bogo-cljs.core
   (:require [clojure.string :as string]
             [bogo-cljs.bg-word
              :refer [grammar-split-word

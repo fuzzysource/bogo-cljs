@@ -2,7 +2,7 @@
   (:require [clojure.string :as string]))
 
 (def SINGLE-VOWELS (str "àáảãạaằắẳẵặăầấẩẫậâèéẻẽẹeềếểễệêìíỉĩịi"
-                              "òóỏõọoồốổỗộôờớởỡợơùúủũụuừứửữựưỳýỷỹỵy"))
+                        "òóỏõọoồốổỗộôờớởỡợơùúủũụuừứửữựưỳýỷỹỵy"))
 (def SINGLE-CONSONANTS "bcdghjklmnpqrstvwxzđ")
 (def LOWER-CHARS (str SINGLE-VOWELS SINGLE-CONSONANTS))
 (def ACCENTS #js ["grave" "acute" "hook" "tilde" "dot" "none"])
@@ -85,35 +85,37 @@
 
 (defn mark->char*
   [char mark]
-   (case mark
-     "hat" (cond
+  (case mark
+    "hat" (cond
            (contains? #{"a" "ă" "â"} char) "â"
            (contains? #{"o" "ô" "ơ"} char) "ô"
            (contains? #{"e"} char) "ê"
            :else char)
-     "breve" (cond
+    "breve" (cond
              (contains? #{"a" "ă" "â"} char) "ă"
              :else char)
-     "horn" (cond
+    "horn" (cond
             (contains? #{"u" "ư"} char) "ư"
             (contains? #{"o" "ô" "ơ"} char) "ơ"
             :else char)
-     "bar" (cond
+    "bar" (cond
            (contains? #{"d" "đ"} char) "đ"
            :else char)
-     "nomark" (cond
+    "nomark" (cond
               (contains? #{"a" "ă" "â"} char) "a"
               (contains? #{"o" "ô" "ơ"} char) "o"
               (contains? #{"u" "ư"} char) "u"
               (contains? #{"d" "đ"} char) "d"
               :else char)
-     char)
+    char)
   )
 
 (defn mark->char
-  "Add mark to a char.
-available marks are  :hat :breve :horn :bar :nomark
-if given char is not possible to add mark, return the original char"
+
+  "Add mark to a char. available marks are  :hat :breve :horn :bar
+  :nomark if given char is not possible to add mark, return the original
+  char"
+
   [char mark]
   (let [c (remove-accent-char (.toLowerCase char))
         current-accent (char->accent char)]
