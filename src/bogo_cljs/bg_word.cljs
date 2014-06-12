@@ -66,8 +66,10 @@
                    rword)))))
 
 (defn word-structure
+
   "Similar to word-structure* but this function is more appropriate
   when processing qu and gi"
+
   [word]
   (let [comps (word-structure* word)
         last-comp0 (str (last (nth comps 0)))
@@ -81,7 +83,9 @@
       comps)))
 
 (defn normalize
+
   "Lower case and remove any accent"
+
   [word]
   (reduce #(+ %1 (.toLowerCase (remove-accent-char %2)))
           ""
@@ -96,8 +100,10 @@
         :else true)))
 
 (defn valid-word?
+
   "Return true if the given word is a valid vietnamese words or is
   extendable to a valid vietnamese word"
+
   [word]
   (let [comps (word-structure (normalize word))
         [first-consonant vowel last-consonant] comps]
@@ -152,7 +158,11 @@
                      word)))
 
 (defn refine-mark->word
-  "Refine mark adding in case vowel is ươu or ưu"
+
+  "In some cases, not all characters in vowel are applied the same mark. For
+  example, ư + u -> ưu not ưư, ươ + u -> ươu not ươư. This function
+  remove those errors from the given word."
+
   [word mark]
   (let [comps (vec (word-structure word))
         vowel (comps 1)
@@ -167,8 +177,10 @@
 
 
 (defn mark->word
+
   "Add mark to a valid word. Always keep in mind that the input has to
   be a valid word otherwise it causes error."
+
   [word mark]
   (refine-mark->word (string/join (mapv (fn [c] (mark->char c mark))
                                        word))
@@ -184,8 +196,10 @@
     ))
 
 (defn grammar-split-word
+
   "Split the string into 2 parts, the later part is the longest valid word
   at the end of the string, the former part is the remaining."
+
   [astring]
   (let [last-word (get-last-word astring)
         position (- (.-length astring) (.-length last-word))
@@ -193,20 +207,26 @@
     [first-word last-word]))
 
 (defn accent->string
+
   "Add accent to a string"
+
   [astring accent]
   (let [[first-word last-word] (grammar-split-word astring)]
     (string/join [first-word (accent->word last-word accent)])))
 
 (defn mark->string
+
   "Add mark to a string"
+
   [astring mark]
   (let [[first-word last-word] (grammar-split-word astring)]
     (string/join [first-word (mark->word last-word mark)])))
 
 (defn word->accent
-  "Determin the accent in the word. Obviously, one word has one accent which is
+
+  "Determine the accent in the word. Obviously, one word has one accent which is
   added into its vowel"
+
   [word]
   (reduce #(if (not= "none" (char->accent %2))
              (char->accent %2)
@@ -215,7 +235,9 @@
           word))
 
 (defn vowel-of-word->mark
+
   "Determine the mark applied to the vowel part of the word"
+
   [word]
   (reduce #(if (not= "nomark" (char->mark %2))
              (char->mark %2)
@@ -224,6 +246,9 @@
           (second (word-structure word))))
 
 (defn refine-accent
+
+  "Move the accent to its right character."
+
   [word]
   (let [accent (word->accent word)]
     (if (not= "" (get-last-word word)) ; Solve the problem when there are some
@@ -240,8 +265,10 @@
       word)))
 
 (defn refine-word
+
   "When some accents, marks or new char is applied to the original word, the position
-  of marks or accents can be wrong. This function fix these mistakes to give a vietnamese
+  of marks or accents can be wrong. This function fixs these mistakes to give a vietnamese
   valid word"
+
   [word]
   (refine-accent (refine-mark word)))

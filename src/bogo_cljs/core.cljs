@@ -6,6 +6,7 @@
             [bogo-cljs.bg-typemode
              :refer [TELEX]]
             bogo-cljs.bg-action))
+
 (defn get-action
   "Action is a function taking in current string, make transform,
   return the new string"
