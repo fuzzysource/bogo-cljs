@@ -1,17 +1,10 @@
 (ns bogo
   (:require bogo-cljs.core))
 
-(def delimiters #"[,./?;:!\s]")
-
 (defn editareas
   "Select all editable areas in the web page"
   []
   (.querySelectorAll js/document "input, textarea, *[contenteditable=\"true\"]"))
-
-(defn selection
-  "Get the dom that has the caret in"
-  []
-  (.. js/document getSelection))
 
 (defn create-html-range
   "Create a HTML range within a node with given start and end position."
@@ -21,22 +14,6 @@
     (.setStart r node startOffset)
     (.setEnd r node endOffset)
     r))
-
-(defn range-before-selection-start
-  [selection]
-  (let
-    [start-node (.-anchorNode selection)
-     offset (.-anchorOffset selection)]
-    (create-html-range start-node 0 offset)
-    ))
-
-(defn last-word-before
-  "Get the last word right before the caret. If there is no word before
-  it, return an empty string"
-  [selection]
-  (let [range-before (range-before-selection-start selection)
-        string-before (.toString range-before)]
-    (last (.split string-before delimiters))))
 
 (defn process-key-at-caret
   "When user do not select any text, the selection object .toString()
