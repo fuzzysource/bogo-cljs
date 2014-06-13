@@ -1,10 +1,17 @@
 (ns bogo
   (:require bogo-cljs.core))
 
-(defn editareas
+(defn editing-areas
   "Select all editable areas in the web page"
   []
-  (.querySelectorAll js/document "input, textarea, *[contenteditable=\"true\"]"))
+  (.. js/Array
+      -prototype
+      -slice
+      (call (.querySelectorAll js/document "input, textarea, *[contenteditable=\"true\"]"))))
+
+(defn key-from-key-event
+  [key-event]
+  (.fromCharCode js/String (.-keyCode key-event)))
 
 (defn create-html-range
   "Create a HTML range within a node with given start and end position."
@@ -20,16 +27,13 @@
   return an empty string. The new string combined from the text before
   the caret and the entered key"
   [selection key]
-  (let [last-text-range (create-html-range (.-anchorNode selection)
-                                           0
-                                           (.-anchorOffset selection))
-        old-text (.toString last-text-range)]
+  (let [current-text-node (.-anchorNode selection)
+        old-text (.-textContent current-text-node)
+        new-text (bogo-cljs.core/process-key old-text key)]
     (do
-      (.deleteContents last-text-range)
-      (.insertNode last-text-range
-                   (.createTextNode js/document
-                                    (bogo-cljs.core/process-key old-text
-                                                                key))))))
+      (set! (.-textContent current-text-node)
+            new-text)
+      (.collapse selection current-text-node (.-length new-text)))))
 
 (defn editing-areas
   []
@@ -43,19 +47,19 @@
 
 (defn backspace-press?
   [key-event]
-  (= "Backspace" (.key key-event)))
+  (= "Backspace" (key-from-key-event key-event)))
 
 
 (defn process-key-event!
   "Process the key event"
-  [key-event selection akey]
+  [selection key-event]
   (if (= "" (.toString selection))
     (do
-      (process-key-at-caret selection akey)
+      (process-key-at-caret selection (key-from-key-event key-event))
       (.preventDefault key-event))
     false))
 
-(defn binding-key-event-handler
+(defn binding-key-event-handler!
   [node]
   (aset node "onkeypress"
         (fn [key-event]
@@ -63,10 +67,10 @@
                   (backspace-press? key-event))
             false ;; Leave the key event handled by default
             ;; if an character is pressed
-            (process-key-event! key-event
-                               (.getSelection js/document)
-                               (.-key key-event))))))
-
-
+            (process-key-event! (.getSelection js/document)
+                                key-event)))))
+(.forEach (editing-areas)
+          (fn [e]
+            (binding-key-event-handler! e)))
 
 
