@@ -35,20 +35,19 @@
             new-text)
       (.collapse selection current-text-node (.-length new-text)))))
 
-(defn editing-areas
-  []
-  (.querySelectorAll js/document "input,textarea,div[contenteditable=true]"))
-
 (defn special-key-pressed?
   [key-event]
   (or (.-altKey key-event)
       (.-ctrlKey key-event)
       (.-metaKey key-event)))
 
-(defn backspace-press?
+(defn backspace-pressed?
   [key-event]
-  (= "Backspace" (key-from-key-event key-event)))
+  (= 8 (.-keyCode key-event)))
 
+(defn space-pressed?
+  [key-event]
+  (= 32 (.-keyCode key-event)))
 
 (defn process-key-event!
   "Process the key event"
@@ -63,8 +62,9 @@
   [node]
   (aset node "onkeypress"
         (fn [key-event]
-          (if (or (special-key-pressed? key-test)
-                  (backspace-press? key-event))
+          (if (or (special-key-pressed? key-event)
+                  (backspace-pressed? key-event)
+                  (space-pressed? key-event))
             false ;; Leave the key event handled by default
             ;; if an character is pressed
             (process-key-event! (.getSelection js/document)
