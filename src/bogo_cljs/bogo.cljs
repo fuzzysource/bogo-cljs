@@ -1,6 +1,8 @@
 (ns bogo
   (:require [bogo-cljs.core :refer [process_key]]))
 
+(def delimiters #"[,./?;:!\s]")
+
 (defn editareas
   "Select all editable areas in the web page"
   []
@@ -10,6 +12,24 @@
   "Get the dom that has the caret in"
   []
   (.. js/document getSelection))
+
+(defn range-before-selection-start
+  [selection]
+  (let
+    [r (.createRange js/document)
+     start-node (.-anchorNode selection)
+     offset (.-anchorOffset selection)]
+    (.setStart r start-node 0)
+    (.setEnd r start-node offset)
+    r))
+
+(defn last-word-before
+  "Get the last word right before the caret. If there is no word before
+  it, return an empty string"
+  [selection]
+  (let [range-before (range-before-selection-start selection)
+        string-before (.toString range-before)]
+    (last (.split string-before delimiters))))
 
 (defn process-key-at-caret!
   "When user do not select any text, the selection object .toString()
