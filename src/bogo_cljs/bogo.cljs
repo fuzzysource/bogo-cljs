@@ -1,5 +1,5 @@
 (ns bogo
-  (:require [bogo-cljs.core :refer [process_key]]))
+  (:require bogo-cljs.core))
 
 (def delimiters #"[,./?;:!\s]")
 
@@ -43,17 +43,16 @@
   return an empty string. The new string combined from the text before
   the caret and the entered key"
   [selection key]
-  (let [node (.-anchorNode selection)
-        last-word (last-word-before selection)
-        word-range (let [width (.-length last-word)
-                         endOffset (.-anchorOffset selection)]
-                     (create-html-range node
-                                        (- endOffset width)
-                                        endOffset))]
+  (let [last-text-range (create-html-range (.-anchorNode selection)
+                                           0
+                                           (.-anchorOffset selection))
+        old-text (.toString last-text-range)]
     (do
-      (.deleteContents word-range)
-      (.insertNode word-range (.createTextNode js/document
-                                               (process_key last-word key))))))
+      (.deleteContents last-text-range)
+      (.insertNode last-text-range
+                   (.createTextNode js/document
+                                    (bogo-cljs.core/process-key old-text
+                                                                key))))))
 
 (defn editing-areas
   []
@@ -90,6 +89,7 @@
             (process-key-event! key-event
                                (.getSelection js/document)
                                (.-key key-event))))))
+
 
 
 

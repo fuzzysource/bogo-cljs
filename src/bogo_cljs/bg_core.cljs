@@ -29,10 +29,10 @@
       (+ (.substring new-string 0 (.-length old-string)) key)
       new-string)))
 
-(defn ^:export process_key
+(defn ^:export process-key
   "Return new string composed by the current string and the key pressed."
   ([astring key]
-   (process_key astring key TELEX))
+   (process-key astring key TELEX))
   ([astring key typemode]
    (let [[first-word last-word] (grammar-split-word astring)
          lkey (.toLowerCase key)
@@ -44,11 +44,11 @@
                                      (action last-word)
                                      (+ last-word key))))))))
 
-(defn ^:export process_sequence
+(defn ^:export process-sequence
   "Return the new string composed by typing a sequence of keys."
   ([sequence]
-   (process_sequence sequence TELEX))
+   (process-sequence sequence TELEX))
   ([sequence typemode]
-   (reduce (fn [word key] (process_key word key typemode))
+   (reduce (fn [word key] (process-key word key typemode))
            ""
            sequence)))
