@@ -13,15 +13,22 @@
   []
   (.. js/document getSelection))
 
+(defn create-html-range
+  "Create a HTML range within a node with given start and end position."
+  [node startOffset endOffset]
+  (let
+    [r (.createRange js/document)]
+    (.setStart r node startOffset)
+    (.setEnd r node endOffset)
+    r))
+
 (defn range-before-selection-start
   [selection]
   (let
-    [r (.createRange js/document)
-     start-node (.-anchorNode selection)
+    [start-node (.-anchorNode selection)
      offset (.-anchorOffset selection)]
-    (.setStart r start-node 0)
-    (.setEnd r start-node offset)
-    r))
+    (create-html-range start-node 0 offset)
+    ))
 
 (defn last-word-before
   "Get the last word right before the caret. If there is no word before
@@ -37,7 +44,7 @@
   the caret and the entered key"
   [selection key]
   (let [word-before (last-word-before selection)
-        word-length (.-length word-before)
+        word-range (create-range)
         new-word (process_key word-before key)]
     (do
       (delete-word-before! selection word-before)
