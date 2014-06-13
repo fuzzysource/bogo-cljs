@@ -47,19 +47,49 @@
         last-word (last-word-before selection)
         word-range (let [width (.-length last-word)
                          endOffset (.-anchorOffset selection)]
-                     (create-range node
-                                   (- endOffset width)
-                                   endOffset))]
+                     (create-html-range node
+                                        (- endOffset width)
+                                        endOffset))]
     (do
       (.deleteContents word-range)
       (.insertNode word-range (.createTextNode js/document
                                                (process_key last-word key))))))
 
-(defn process-key!
+(defn editing-areas
+  []
+  (.querySelectorAll js/document "input,textarea,div[contenteditable=true]"))
+
+(defn special-key-pressed?
+  [key-event]
+  (or (.-altKey key-event)
+      (.-ctrlKey key-event)
+      (.-metaKey key-event)))
+
+(defn backspace-press?
+  [key-event]
+  (= "Backspace" (.key key-event)))
+
+
+(defn process-key-event!
   "Process the key event"
-  [selection key]
-  (if (no-text-selection selection)
-    (process-key-at-caret! selection key)
-    (replace-selection-with-key selection! key)))
+  [key-event selection akey]
+  (if (= "" (.toString selection))
+    (do
+      (process-key-at-caret selection akey)
+      (.preventDefault key-event))
+    false))
+
+(defn binding-key-event-handler
+  [node]
+  (aset node "onkeypress"
+        (fn [key-event]
+          (if (or (special-key-pressed? key-test)
+                  (backspace-press? key-event))
+            false ;; Leave the key event handled by default
+            ;; if an character is pressed
+            (process-key-event! key-event
+                               (.getSelection js/document)
+                               (.-key key-event))))))
+
 
 
