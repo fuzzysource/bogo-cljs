@@ -38,17 +38,22 @@
         string-before (.toString range-before)]
     (last (.split string-before delimiters))))
 
-(defn process-key-at-caret!
+(defn process-key-at-caret
   "When user do not select any text, the selection object .toString()
   return an empty string. The new string combined from the text before
   the caret and the entered key"
   [selection key]
-  (let [word-before (last-word-before selection)
-        word-range (create-range)
-        new-word (process_key word-before key)]
+  (let [node (.-anchorNode selection)
+        last-word (last-word-before selection)
+        word-range (let [width (.-length last-word)
+                         endOffset (.-anchorOffset selection)]
+                     (create-range node
+                                   (- endOffset width)
+                                   endOffset))]
     (do
-      (delete-word-before! selection word-before)
-      (insert-new-text! selection new-word))))
+      (.deleteContents word-range)
+      (.insertNode word-range (.createTextNode js/document
+                                               (process_key last-word key))))))
 
 (defn process-key!
   "Process the key event"
